@@ -61,19 +61,26 @@ export default function App() {
   const onPayPress = () => {    
 
     const payload = {
-      pg: 'nicepay',  //['kcp', 'danal', 'inicis', 'nicepay', 'lgup', 'toss', 'payapp', 'easypay', 'jtnet', 'tpay', 'mobilians', 'payletter', 'onestore', 'welcome'] 중 택 1
-      name: '마스카라', //결제창에 보여질 상품명
-      order_id: '1234_1234', //개발사에 관리하는 주문번호 
-      method: 'phone', 
-      price: 1000 //결제금액 
+      pg: 'danal',  //['kcp', 'danal', 'inicis', 'nicepay', 'lgup', 'toss', 'payapp', 'easypay', 'tpay', 'mobilians', 'payletter', 'welcome'] 중 택 1
+      method: 'card_rebill', //['card', 'phone', 'bank', 'vbank', 'card_rebill'] 중 택 1   결제수단 
+      // methods: ['card'], ['card', 'phone', 'bank', 'vbank', 'card_rebill'] 중 사용하고자 하는 값을 배열 형태로 적용 
+      order_name: '마스카라', //결제창에 보여질 상품명
+      price: 1000, //결제금액 
+      // tax_free: 500, //비과세 금액, 결제금액 1000원 중 500원 지정시 복합과세(비과세 500, 과세 500)에 해당함 
+      order_id: '1234_1234', //개발사에 관리하는 결제 주문번호 
+      // subscription_id: '12345_12435', //개발사에 관리하는 정기결제 주문번호 
+      // authentication_id: '123456_124356', //개발사에 관리하는 본인인증 주문번호 
+      params: '', //전달하고자 하는 parameter, 개발사에서 자유롭게 데이터를 전달 후 done에서 돌려받을 수 있음, json string 추천 
+      show_agree_window: false, //약관 동의창 띄울지 
+      user_token: '', //카드 간편결제, 생체결제시 필요한 파라미터
     } 
 
     //결제되는 상품정보들로 통계에 사용되며, price의 합은 결제금액과 동일해야함 
     const items = [
       {
-        item_name: '키보드', //통계에 반영될 상품명 
+        name: '키보드', //통계에 반영될 상품명 
         qty: 1, //수량 
-        unique: 'ITEM_CODE_KEYBOARD', //개발사에서 관리하는 상품고유번호 
+        id: 'ITEM_CODE_KEYBOARD', //개발사에서 관리하는 상품고유번호 
         price: 1000, //상품단가 
         cat1: '패션', //카테고리 상 , 자유롭게 기술
         cat2: '여성상의', //카테고리 중, 자유롭게 기술 
@@ -88,7 +95,7 @@ export default function App() {
       email: 'user1234@gmail.com', //구매자 이메일
       gender: 0, //성별, 1:남자 , 0:여자
       birth: '1986-10-14', //생년월일 yyyy-MM-dd
-      phone: '01012345678', //전화번호, 페이앱 필수 
+      phone: '01012345678', //전화번호, 페이앱 필수, - 없이 숫자만 입력
       area: '서울', // [서울,인천,대구,광주,부산,울산,경기,강원,충청북도,충북,충청남도,충남,전라북도,전북,전라남도,전남,경상북도,경북,경상남도,경남,제주,세종,대전] 중 택 1
       addr: '서울시 동작구 상도로' //주소
     }
@@ -96,46 +103,46 @@ export default function App() {
 
     //기타 설정
     const extra = {
-      app_scheme: "bootpayrnapi", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명 
-      expire_month: "0", //정기결제가 적용되는 개월 수 (정기결제 사용시), 미지정일시 PG사 기본값에 따름
-      vbank_result: true, //가상계좌 결과창을 볼지(true), 말지(false)
-      start_at: "",  //정기 결제 시작일 - 지정하지 않을 경우 - 그 날 당일로부터 결제가 가능한 Billing key 지급, "2020-10-14"
-      end_at: "", // 정기결제 만료일 - 기간 없음 - 무제한, "2020-10-14"
-      quota: "0,2,3",  //결제금액이 5만원 이상시 할부개월 허용범위를 설정할 수 있음, [0(일시불), 2개월, 3개월] 허용, 미설정시 12개월까지 허용
+      card_quota: "0,2,3",  //결제금액이 5만원 이상시 할부개월 허용범위를 설정할 수 있음, [0(일시불), 2개월, 3개월] 허용, 미설정시 12개월까지 허용
+      seller_ame: '판매자명A', //노출되는 판매자명 설정
+      delivery_day: 1,  //배송일자
+      locale: "ko", //결제창 언어지원
       offer_period: "", //결제창 제공기간에 해당하는 string 값, 지원하는 PG만 적용됨
-      popup: 1, //1이면 popup, 아니면 iframe 연동
-      quick_popup: 1, //1: popup 호출시 버튼을 띄우지 않는다. 아닐 경우 버튼을 호출한다
-      locale: "ko", 
-      disp_cash_result: "Y",  // 현금영수증 보일지 말지.. 가상계좌 KCP 옵션
-      escrow: "0",  // 에스크로 쓸지 안쓸지
-      theme: "purple", 
-      custom_background: "", 
-      custom_font_color: "", 
-      show_close_button: true 
+      display_cash_receipt: true, // 현금영수증 보일지 말지.. 가상계좌 KCP 옵션
+      deposit_expiration: "", //가상계좌 입금 만료일자 설정
+      app_scheme: "",  //모바일 앱에서 결제 완료 후 돌아오는 옵션 ( 아이폰만 적용 )
+      use_card_point: true, //카드 포인트 사용 여부 (토스만 가능)
+      direct_card: "", //해당 카드로 바로 결제창 (토스만 가능)
+      use_order_id: false, //가맹점 order_id로 PG로 전송
+      international_card_only: false, //해외 결제카드 선택 여부 (토스만 가능)
+      phone_carrier: "", //본인인증 시 고정할 통신사명, SKT,KT,LGT 중 1개만 가능
+      direct_app_card: "", //카드사앱으로 direct 호출
+      direct_samsungpay: "", //삼성페이 바로 띄우기
+      test_deposit: false, //가상계좌 모의 입금
+      popup: true, //네이버페이 등 특정 PG 일 경우 popup을 true로 해야함
+      separately_confirmed: true // confirm 이벤트를 호출할지 말지, false일 경우 자동승인 
     } 
 
-    if(bootpay != null && bootpay.current != null) bootpay.current.request(payload, items, user, extra);
+    if(bootpay != null && bootpay.current != null) bootpay.current.requestSubscription(payload, items, user, extra);
   }
 
 
-  const onCancel = (data: string) => {
-    console.log('cancel', data);
-
+  const onCancel = (data: string) => { 
     var json = JSON.stringify(data) 
-    console.log('cancel json', json);
+    console.log('cancel', json);
   }
 
   const onError = (data: string) => {
     console.log('error', data);
   }
 
-  const onReady = (data: string) => {
-    console.log('ready', data);
+  const onIssued = (data: string) => {
+    console.log('issued', data);
   }
 
   const onConfirm = (data: string) => {
     console.log('confirm', data);
-    if(bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm(data);
+    if(bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm();
   }
 
   const onDone = (data: string) => {
@@ -153,13 +160,16 @@ export default function App() {
   return (
     <View style={styles.container}>
 
-<BootpayWebView  
+{/* ios_application_id={'5b8f6a4d396fa665fdc2b5e9'}
+          android_application_id={'5b8f6a4d396fa665fdc2b5e8'}  */}
+
+    <BootpayWebView  
           ref={bootpay}
-          ios_application_id={'5b8f6a4d396fa665fdc2b5e9'}
-          android_application_id={'5b8f6a4d396fa665fdc2b5e8'} 
+          ios_application_id={'59bfc733e13f337dbd6ca489'}
+          android_application_id={'5a029249b957d73c2b3ae5f5'} 
           onCancel={onCancel}
           onError={onError}
-          onReady={onReady}
+          onIssued={onIssued}
           onConfirm={onConfirm}
           onDone={onDone}
           onClose={onClose} 

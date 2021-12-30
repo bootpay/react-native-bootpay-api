@@ -169,13 +169,13 @@ export default function App() {
     console.log('error', data);
   }
 
-  const onReady = (data) => {
-    console.log('ready', data);
+  const onIssued = (data) => {
+    console.log('issued', data);
   }
 
   const onConfirm = (data) => {
     console.log('confirm', data);
-    if(bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm(data);
+    if(bootpay != null && bootpay.current != null) bootpay.current.transactionConfirm();
   }
 
   const onDone = (data) => {
@@ -201,7 +201,7 @@ export default function App() {
           onCancel={onCancel}
           
           onError={onError}
-          onReady={onReady}
+          onIssued={onIssued}
           onConfirm={onConfirm}
           onDone={onDone}
           onClose={onClose} 
