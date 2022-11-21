@@ -1,4 +1,4 @@
-### 4.1.6
+### 4.2.6
 - bootpay js 4.2.6 update 
 - user 회원 정보가 object로 전달되는 버그 개선 
 
