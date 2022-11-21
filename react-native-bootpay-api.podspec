@@ -16,5 +16,5 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/bootpay/react-native-bootpay-api.git", :tag => "#{s.version}" }
   s.source_files  = "apple/**/*.{h,m}"
 
-  s.dependency 'React-Core'
+  s.dependency 'React-Core' 
 end

@@ -73,7 +73,7 @@
     "react-native-webview-bootpay": "^11.22.85",
     "react-native-device-info": "^8.7.0",
     "react-native-sensitive-info": "^5.5.8",
-    "react-native-base64": "^0.2.1", 
+    "react-native-base64": "^0.2.1",  
     "react-native-aes-crypto": "^2.1.0",
     "@types/lodash": "^4.14.182"
   },  

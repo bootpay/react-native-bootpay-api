@@ -7,8 +7,11 @@ import { SafeAreaView, Modal, TouchableOpacity, Image, StyleSheet, Platform } fr
 import WebView, {WebViewMessageEvent}  from 'react-native-webview-bootpay';
 import { BootpayTypesProps, Payload, Extra, Item, User } from './BootpayTypes';
 import {debounce} from 'lodash';
-import UserInfo from './UserInfo'
-   
+import UserInfo from './UserInfo'     
+// import  Loader from './Loader'
+// import ClipLoader  from "react-spinners/ClipLoader";
+// import Spinner from 'react-native-loading-spinner-overlay';
+
 
 export class Bootpay extends Component<BootpayTypesProps> {
     // webView = useRef<WebView>(null); 
@@ -27,8 +30,9 @@ export class Bootpay extends Component<BootpayTypesProps> {
         visibility: false, 
         script: '',
         firstLoad: false,
-        showCloseButton: false
-    }  
+        showCloseButton: false,
+        isShowProgress: false 
+    }   
     // _payload = {}
     _VERSION = "4.1.5"
     _DEBUG = false;
@@ -36,20 +40,31 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
     dismiss = () => { 
         this.setState(
-            {
+            { 
                 visibility: false
             }
         ) 
     }
  
 
+    showProgressBar = (isShow: boolean) => { 
+
+        this.setState(
+            {
+                isShowProgress: isShow
+            }
+        )
+
+    }
+
+
     closeDismiss = () => { 
-        if(this.props.onClose != undefined) this.props.onClose();
+        // if(this.props.onClose != undefined) this.props.onClose();
         this.dismiss();
     }
 
 
-    onMessage = (event: WebViewMessageEvent) => {  
+    onMessage = async (event: WebViewMessageEvent) => {  
 
         if (event == undefined) return;
 
@@ -57,6 +72,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
   
     
         if(res == 'close') {
+            this.showProgressBar(false);
             this.closeDismiss(); 
             return;
         }
@@ -86,52 +102,64 @@ export class Bootpay extends Component<BootpayTypesProps> {
         if(redirect === true) {
             switch (data.event) {
                 case 'cancel':
+                    this.showProgressBar(false);
                     if(this.props.onCancel != undefined) this.props.onCancel(data); 
                     this.closeDismiss(); 
                     break;
                 case 'error':
+                    this.showProgressBar(false);
                     if(this.props.onError != undefined) this.props.onError(data); 
                     if(show_error == false) {
                         this.closeDismiss(); 
                     }
                     break;
                 case 'issued':
+                    this.showProgressBar(false);
                     if(this.props.onIssued != undefined) this.props.onIssued(data);
                     if(show_success == false) {
                         this.closeDismiss(); 
                     }
                     break;
                 case 'confirm':
+                    this.showProgressBar(true);
                     if(this.props.onConfirm != undefined) this.props.onConfirm(data);
                     break;
                 case 'done':
+                    this.showProgressBar(false);
                     if(this.props.onDone != undefined) this.props.onDone(data); 
                     if(show_success == false) {
                         this.closeDismiss(); 
                     }
                     break;
                 case 'close':
+                    this.showProgressBar(false);
                     this.closeDismiss(); 
                     break; 
             }
         } else {
             switch (data.event) {
                 case 'cancel':
+                    this.showProgressBar(false);
                     if(this.props.onCancel != undefined) this.props.onCancel(data); 
                     break;
                 case 'error':
+                    this.showProgressBar(false);
                     if(this.props.onError != undefined) this.props.onError(data); 
                     break;
                 case 'issued':
+                    this.showProgressBar(false);
                     if(this.props.onIssued != undefined) this.props.onIssued(data);
                     break;
                 case 'confirm':
+                    this.showProgressBar(true);
                     if(this.props.onConfirm != undefined) this.props.onConfirm(data);
                     break;
                 case 'done':
+                    this.showProgressBar(false);
                     if(this.props.onDone != undefined) this.props.onDone(data); 
                     break;
                 case 'close':
+                    this.showProgressBar(false);
                     this.closeDismiss(); 
                     break; 
             }
@@ -177,9 +205,9 @@ export class Bootpay extends Component<BootpayTypesProps> {
         // this.injectJavaScript(fullScript);
         // if(this.state.showCloseButton == true) {
         //     if(this.webView == null || this.webView == undefined) return; 
-        //     this.webView.showCloseButton();
+        //     this.webView.showCloseButton( );
         // }
-    // } 
+    //  } 
 
     transactionConfirm = () => { 
         const script = "Bootpay.confirm()"
@@ -255,7 +283,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
                 firstLoad: false,
                 showCloseButton: false
             }
-        )
+         )
         UserInfo.setBootpayLastTime(Date.now());
     } 
 
@@ -265,7 +293,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
     } 
  
     render() {
-        return ( 
+        return (  
             <Modal
                 animationType={'slide'}
                 transparent={false} 
@@ -274,12 +302,13 @@ export class Bootpay extends Component<BootpayTypesProps> {
                     // console.log(1234);
                     // this.dismiss();
                 }}
-                visible={this.state.visibility}>
+                
+                visible={this.state.visibility}> 
                 <SafeAreaView style={{ flex: 1 }}>
                     {
                         this.state.showCloseButton &&
                         <TouchableOpacity
-                            onPress={() => {
+                            onPress={() =>  {
                                 var cancelData = {
                                     action: 'BootpayCancel',
                                     message: '사용자에 의해 취소되었습니다'
@@ -289,17 +318,27 @@ export class Bootpay extends Component<BootpayTypesProps> {
                                 if(this.props.onClose != undefined) this.props.onClose(); 
 
                                 this.setState({visibility: false})
-                            } }>
+
+                                // this.showProgressBar(true);
+ 
+                            } }> 
                             <Image 
                                 style={[styles.overlay]}
                                 source={require('../images/close.png')} />
                         </TouchableOpacity>
                     }
+                    
+              
+ 
+              
+                    
+
+
                     <WebView
                         ref={this.webView}  
                         originWhitelist={['*']}
                         source={{
-                            uri: 'https://webview.bootpay.co.kr/4.1.5'
+                            uri: 'https://webview.bootpay.co.kr/4.2.6'
                         }} 
                         injectedJavaScript={this.state.script}
                         javaScriptEnabled={true}
@@ -307,9 +346,10 @@ export class Bootpay extends Component<BootpayTypesProps> {
                         // scalesPageToFit={true} 
                         onMessage={this.onMessage}
                     />
-                </SafeAreaView>
+                </SafeAreaView> 
+                
 
-            </Modal> 
+            </Modal>  
         )
     }
 
@@ -332,8 +372,12 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
         payload.application_id =  Platform.OS == 'ios' ? this.props.ios_application_id : this.props.android_application_id;
         payload.items = items;
-        payload.user = user && new User() 
-        payload.extra = extra && new Extra()
+        payload.user = user;
+         
+
+        payload.user = Object.assign(new User(), user); //set default value from class optional parameter value
+        payload.extra = Object.assign(new Extra(), extra); //set default value from class optional parameter value
+
  
         this.payload = payload 
  
@@ -345,9 +389,11 @@ export class Bootpay extends Component<BootpayTypesProps> {
                 ${this.generateScript(payload, requestMethod)}
                 `,
                 firstLoad: false,
-                showCloseButton: extra.show_close_button || false  
-            }
+                showCloseButton: extra.show_close_button || false,
+                spinner: false 
+             }
         ) 
+ 
 
         UserInfo.updateInfo();  
     }

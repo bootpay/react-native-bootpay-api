@@ -14,6 +14,13 @@ export interface BootpayTypesProps extends ViewProps {
     onClose?: () => void 
 }
 
+export interface LoadingTypesProps extends ViewProps {
+    loading?: boolean 
+}
+
+
+
+
 export class User {
     constructor() {}
 
@@ -58,6 +65,8 @@ export class Onestore {
     sim_operator?: string = "UNKNOWN_SIM_OPERATOR"
     installer_package_name?: string = "UNKNOWN_INSTALLER"
 }
+
+ 
 
 // export interface Extra {
 //     card_quota?: string;
