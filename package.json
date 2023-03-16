@@ -1,6 +1,6 @@
 {
   "name": "react-native-bootpay-api",
-  "version": "4.2.6",
+  "version": "4.3.0",
   "description": "React Native를 위한 bootpay 라이브러리 입니다.",
   "main": "index.js",
   "main-internal": "src/index.ts",
@@ -31,7 +31,8 @@
   }, 
   "peerDependencies": {
     "react": "*",
-    "react-native": "*"
+    "react-native": "*",
+    "react-native-webview-bootpay": "11.x"
   }, 
   "dependencies": {
     "escape-string-regexp": "2.0.0",
@@ -61,7 +62,7 @@
     "metro-react-native-babel-preset": "^0.67.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-native": "0.68.2",
+    "react-native": "0.68.5",
     "react-native-macos": "0.66.57",
     "react-native-test-app": "1.3.8",
     "react-native-windows": "0.68.4",
@@ -70,7 +71,7 @@
     "semantic-release": "15.13.24",
     "typescript": "^4.0.0",
     "winappdriver": "^0.0.7",
-    "react-native-webview-bootpay": "^11.22.85",
+    "react-native-webview-bootpay": "^11.26.15",
     "react-native-device-info": "^8.7.0",
     "react-native-sensitive-info": "^5.5.8",
     "react-native-base64": "^0.2.1",  

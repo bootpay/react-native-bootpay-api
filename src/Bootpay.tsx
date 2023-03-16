@@ -34,7 +34,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
         isShowProgress: false 
     }   
     // _payload = {}
-    _VERSION = "4.1.5"
+    _VERSION = "4.2.7"
     _DEBUG = false;
 
 
@@ -47,19 +47,17 @@ export class Bootpay extends Component<BootpayTypesProps> {
     }
  
 
-    showProgressBar = (isShow: boolean) => { 
-
+    showProgressBar = (isShow: boolean) => {
         this.setState(
             {
                 isShowProgress: isShow
             }
         )
-
     }
 
 
     closeDismiss = () => { 
-        // if(this.props.onClose != undefined) this.props.onClose();
+        if(this.props.onClose != undefined) this.props.onClose();
         this.dismiss();
     }
 
@@ -338,7 +336,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
                         ref={this.webView}  
                         originWhitelist={['*']}
                         source={{
-                            uri: 'https://webview.bootpay.co.kr/4.2.6'
+                            uri: 'https://webview.bootpay.co.kr/4.2.7'
                         }} 
                         injectedJavaScript={this.state.script}
                         javaScriptEnabled={true}
