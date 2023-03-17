@@ -34,7 +34,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
         isShowProgress: false 
     }   
     // _payload = {}
-    _VERSION = "4.2.7"
+    _VERSION = "4.3.1"
     _DEBUG = false;
 
 
