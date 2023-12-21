@@ -4,7 +4,7 @@ const project = (() => {
   try {
     const {
       androidManifestPath,
-      iosProjectPath,
+      // iosProjectPath,
       windowsProjectPath,
     } = require('react-native-test-app');
     return {
@@ -15,8 +15,11 @@ const project = (() => {
         ),
       },
       ios: {
-        project: iosProjectPath('example/ios'),
-      }, 
+        sourceDir: 'example/ios',
+      },
+      // ios: {
+      //   project: iosProjectPath('example/ios'),
+      // }, 
     };
   } catch (_) {
     return undefined;

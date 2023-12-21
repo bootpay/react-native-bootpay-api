@@ -1,28 +1,6 @@
-import org.apache.tools.ant.taskdefs.condition.Os
-
 buildscript {
-//    def androidTestAppDir = "../../node_modules/react-native-test-app/android"
-//    apply(from: "${androidTestAppDir}/dependencies.gradle")
-
-
-    ext {
-        buildToolsVersion = "31.0.0"
-        minSdkVersion = 21
-        compileSdkVersion = 31
-        targetSdkVersion = 31
-
-        if (System.properties['os.arch'] == "aarch64") {
-            // For M1 Users we need to use the NDK 24 which added support for aarch64
-            ndkVersion = "24.0.8215888"
-        } else if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-            // For Android Users, we need to use NDK 23, otherwise the build will
-            // fail due to paths longer than the OS limit
-            ndkVersion = "23.1.7779620"
-        } else {
-            // Otherwise we default to the side-by-side NDK version from AGP.
-            ndkVersion = "21.4.7075529"
-        }
-    }
+    def androidTestAppDir = "../../node_modules/react-native-test-app/android"
+    apply(from: "${androidTestAppDir}/dependencies.gradle")
 
     repositories {
         mavenCentral()
@@ -30,34 +8,170 @@ buildscript {
     }
 
     dependencies {
-//        classpath "com.android.tools.build:gradle:$androidPluginVersion"
-
-        classpath("com.android.tools.build:gradle:7.0.4")
-//        classpath("com.facebook.react:react-native-gradle-plugin")
-
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
+        getReactNativeDependencies().each { dependency ->
+            classpath(dependency)
+        }
     }
 }
 
 
-allprojects {
-    repositories {
-        maven {
-            // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
-            url("$rootDir/../..//node_modules/react-native/android")
-        }
-        maven {
-            // Android JSC is installed from npm
-            url("$rootDir/../..//node_modules/jsc-android/dist")
-        }
-        mavenCentral {
-            // We don't want to fetch react-native from Maven Central as there are
-            // older versions over there.
-            content {
-                excludeGroup "com.facebook.react"
-            }
-        }
-        google()
-        maven { url 'https://www.jitpack.io' }
-    }
-}
+//import java.nio.file.Paths
+//
+//buildscript {
+//    ext.safeExtGet = {prop ->
+//        rootProject.ext.has(prop) ? rootProject.ext.get(prop) : project.properties['ReactNativeBootpayApi_' + prop]
+//    }
+//    repositories {
+//        google()
+//        gradlePluginPortal()
+//    }
+//    dependencies {
+//        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${safeExtGet('kotlinVersion')}")
+//        classpath("com.android.tools.build:gradle:7.0.4")
+//    }
+//}
+//
+//def getExtOrIntegerDefault(prop) {
+//  return rootProject.ext.has(prop) ? rootProject.ext.get(prop) : (project.properties['ReactNativeBootpayApi_' + prop]).toInteger()
+//}
+//
+//static def findNodeModulePath(baseDir, packageName) {
+//    def basePath = baseDir.toPath().normalize()
+//    // Node's module resolution algorithm searches up to the root directory,
+//    // after which the base path will be null
+//    while (basePath) {
+//        def candidatePath = Paths.get(basePath.toString(), "node_modules", packageName)
+//        if (candidatePath.toFile().exists()) {
+//            return candidatePath.toString()
+//        }
+//        basePath = basePath.getParent()
+//    }
+//    return null
+//}
+//
+//def isNewArchitectureEnabled() {
+//    return project.hasProperty("newArchEnabled") && project.newArchEnabled == "true"
+//}
+//
+//
+//apply plugin: 'com.android.library'
+//if (isNewArchitectureEnabled()) {
+//    apply plugin: 'com.facebook.react'
+//}
+//apply plugin: 'kotlin-android'
+//
+//android {
+//    compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
+//
+//    defaultConfig {
+//        minSdkVersion getExtOrIntegerDefault('minSdkVersion')
+//        targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
+//        buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", isNewArchitectureEnabled().toString()
+//    }
+//
+//    sourceSets {
+//        main {
+//            if (isNewArchitectureEnabled()) {
+//                java.srcDirs += ['src/newarch']
+//            } else {
+//                java.srcDirs += ['src/oldarch']
+//            }
+//        }
+//    }
+//}
+//
+//def reactNativePath = findNodeModulePath(projectDir, "react-native")
+//def codegenPath = findNodeModulePath(projectDir, "@react-native/codegen")
+//if (codegenPath == null) {
+//  // Compat for 0.71 and lower (to be removed)
+//  codegenPath = findNodeModulePath(projectDir, "react-native-codegen")
+//}
+//
+//repositories {
+//    maven {
+//        url "${reactNativePath}/android"
+//    }
+//    mavenCentral()
+//    google()
+//}
+//
+//dependencies {
+//    implementation 'com.facebook.react:react-native:+'
+//    implementation "org.jetbrains.kotlin:kotlin-stdlib:${safeExtGet('kotlinVersion')}"
+//    implementation "androidx.webkit:webkit:${safeExtGet('webkitVersion')}"
+//}
+//
+//if (isNewArchitectureEnabled()) {
+//    react {
+//        jsRootDir = file("../src/")
+//        libraryName = "BPCWebView"
+//        codegenJavaPackageName = "kr.co.bootpay.webview"
+//        codegenDir = new File(codegenPath)
+//        reactNativeDir = new File(reactNativePath)
+//    }
+//}
+//
+//
+//// import org.apache.tools.ant.taskdefs.condition.Os
+//
+//// buildscript {
+//// //    def androidTestAppDir = "../../node_modules/react-native-test-app/android"
+//// //    apply(from: "${androidTestAppDir}/dependencies.gradle")
+//
+//
+////     ext {
+////         buildToolsVersion = "31.0.0"
+////         minSdkVersion = 21
+////         compileSdkVersion = 31
+////         targetSdkVersion = 31
+//
+////         if (System.properties['os.arch'] == "aarch64") {
+////             // For M1 Users we need to use the NDK 24 which added support for aarch64
+////             ndkVersion = "24.0.8215888"
+////         } else if (Os.isFamily(Os.FAMILY_WINDOWS)) {
+////             // For Android Users, we need to use NDK 23, otherwise the build will
+////             // fail due to paths longer than the OS limit
+////             ndkVersion = "23.1.7779620"
+////         } else {
+////             // Otherwise we default to the side-by-side NDK version from AGP.
+////             ndkVersion = "21.4.7075529"
+////         }
+////     }
+//
+////     repositories {
+////         mavenCentral()
+////         google()
+////     }
+//
+////     dependencies {
+//// //        classpath "com.android.tools.build:gradle:$androidPluginVersion"
+//
+////         classpath("com.android.tools.build:gradle:7.0.4")
+//// //        classpath("com.facebook.react:react-native-gradle-plugin")
+//
+////         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21"
+////     }
+//// }
+//
+//
+//// allprojects {
+////     repositories {
+////         maven {
+////             // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
+////             url("$rootDir/../..//node_modules/react-native/android")
+////         }
+////         maven {
+////             // Android JSC is installed from npm
+////             url("$rootDir/../..//node_modules/jsc-android/dist")
+////         }
+////         mavenCentral {
+////             // We don't want to fetch react-native from Maven Central as there are
+////             // older versions over there.
+////             content {
+////                 excludeGroup "com.facebook.react"
+////             }
+////         }
+////         google()
+////         maven { url 'https://www.jitpack.io' }
+////     }
+//// }
