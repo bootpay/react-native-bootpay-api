@@ -2681,6 +2681,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/react-native-base64@^0.2.2":
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-base64/-/react-native-base64-0.2.2.tgz#d4e1d537e6d547d23d96a1e64627acc13587ae6b"
+  integrity sha512-obr+/L9Jaxdr+xCVS/IQcYgreg5xtnui4Wqw/G1acBUtW2CnqVJj6lK6F/5F3+5d2oZEo5xDDLqy8GVn2HbEmw==
+
 "@types/react@18.0.27":
   version "18.0.27"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.0.27.tgz#d9425abe187a00f8a5ec182b010d4fd9da703b71"
@@ -11628,11 +11633,6 @@ react-native-aes-crypto@^2.1.0:
   resolved "https://registry.yarnpkg.com/react-native-aes-crypto/-/react-native-aes-crypto-2.1.1.tgz#371100ad322195f2792e2b365923620599d8abc2"
   integrity sha512-huAt7k43myFiY0bPnvoaCP0oBjTMw4VsL2mjkmCPzzDA56Sm3ps5xXIejPo5Z9qfnei9iijHzATV8eRNMEPtbQ==
 
-react-native-base64@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-base64/-/react-native-base64-0.2.1.tgz#3d0e73a649c4c0129f7b7695d3912456aebae847"
-  integrity sha512-eHgt/MA8y5ZF0aHfZ1aTPcIkDWxza9AaEk4GcpIX+ZYfZ04RcaNahO+527KR7J44/mD3efYfM23O2C1N44ByWA==
-
 react-native-codegen@^0.71.5:
   version "0.71.5"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.71.5.tgz#454a42a891cd4ca5fc436440d301044dc1349c14"
@@ -11715,10 +11715,10 @@ react-native-test-app@2.5.15:
     semver "^7.3.5"
     uuid "^8.3.2"
 
-react-native-webview-bootpay@11.26.20:
-  version "11.26.20"
-  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-11.26.20.tgz#aebdd1bbb6dad152d261bdb34c2afb2cb10e1688"
-  integrity sha512-ErIrKh7konU4Vl4rYDbUYyHj1NDVNy1ndyC8LN6NKKT8sPnERHtASfiMa1OD4TsOEZlnBznnCnLkMN+KluzLxA==
+react-native-webview-bootpay@13.6.0:
+  version "13.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.6.0.tgz#81957bf036a74e910d53575a7567f5f725c833ca"
+  integrity sha512-roZoEooJemTGOzPkrbn5ZTUCkYNq69GblNURjjqOt8VXyBj4aS7WS7X4MaGt9RNKVSVPoY5ZVvnRUHLdhYo2Pg==
   dependencies:
     escape-string-regexp "2.0.0"
     invariant "2.2.4"

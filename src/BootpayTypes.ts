@@ -4,6 +4,7 @@ import {
 } from 'react-native'
 
 export interface BootpayTypesProps extends ViewProps {
+    ref?: any
     ios_application_id?: string
     android_application_id?: string
     onCancel?: (data: Object) => void
