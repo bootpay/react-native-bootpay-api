@@ -325,13 +325,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
                                 source={require('../images/close.png')} />
                         </TouchableOpacity>
                     }
-                    
-              
- 
-              
-                    
-
-
+                     
                     <WebView
                         ref={this.webView}  
                         originWhitelist={['*']}
