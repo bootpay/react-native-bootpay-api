@@ -120,7 +120,12 @@ export class Bootpay extends Component<BootpayTypesProps> {
                     break;
                 case 'confirm':
                     this.showProgressBar(true);
-                    if(this.props.onConfirm != undefined) this.props.onConfirm(data);
+                    // if(this.props.onConfirm != undefined) this.props.onConfirm(data);
+                    if(this.props.onConfirm != undefined) {
+                        if(this.props.onConfirm(data)) {
+                            this.transactionConfirm(); 
+                        }
+                    }
                     break;
                 case 'done':
                     this.showProgressBar(false);
@@ -150,7 +155,11 @@ export class Bootpay extends Component<BootpayTypesProps> {
                     break;
                 case 'confirm':
                     this.showProgressBar(true);
-                    if(this.props.onConfirm != undefined) this.props.onConfirm(data);
+                    if(this.props.onConfirm != undefined) {
+                        if(this.props.onConfirm(data)) {
+                            this.transactionConfirm(); 
+                        }
+                    }
                     break;
                 case 'done':
                     this.showProgressBar(false);
