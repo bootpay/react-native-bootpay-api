@@ -235,11 +235,11 @@ PODS:
     - glog
   - react-native-aes (2.0.0):
     - React-Core
-  - react-native-bootpay-api (5.0.0):
+  - react-native-bootpay-api (5.0.3):
     - React-Core
   - react-native-sensitive-info (5.5.8):
     - React
-  - react-native-webview-bootpay (11.26.20):
+  - react-native-webview-bootpay (13.6.13):
     - React-Core
   - React-perflogger (0.71.12)
   - React-RCTActionSheet (0.71.12):
@@ -488,9 +488,9 @@ SPEC CHECKSUMS:
   React-jsinspector: ec4dcbfb1f4e72f04f826a0301eceee5fa7ca540
   React-logger: 35538accacf2583693fbc3ee8b53e69a1776fcee
   react-native-aes: c75c46aa744bef7c2415fdf7f5b2dcb75ca4364d
-  react-native-bootpay-api: 54fe591de0a9784767e986f8c290db4d87675712
+  react-native-bootpay-api: 8359a85b4dc0a9c8d9a0a316120d2533dc2667dd
   react-native-sensitive-info: 400c6e3d27945e15c8cddb5b4b92233c85ee06f8
-  react-native-webview-bootpay: 004d021729a60e7d0abf52f37092052f985524fc
+  react-native-webview-bootpay: 323298c38d14cfe8a32b8c22b314caf31c6299ec
   React-perflogger: 75b0e25075c67565a830985f3c373e2eae5389e0
   React-RCTActionSheet: a0c3e916b327e297d124d9ebe8b0c721840ee04d
   React-RCTAnimation: 3da7025801d7bf0f8cfd94574d6278d5b82a8b88
@@ -512,4 +512,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c6a66dd63bfcf2a90fa80f180fd807aecf57efa1
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.14.3

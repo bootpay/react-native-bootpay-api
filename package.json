@@ -1,6 +1,6 @@
 {
   "name": "react-native-bootpay-api",
-  "version": "5.0.3",
+  "version": "13.6.13",
   "description": "React Native를 위한 bootpay 라이브러리 입니다.",
   "main": "index.tsx", 
   "author": "bootpay <bootpay.co.kr@gmail.com>",
@@ -32,8 +32,7 @@
   }, 
   "peerDependencies": {
     "react": "*",
-    "react-native": "*",
-    "react-native-webview-bootpay": "13.6.1"
+    "react-native": "*"
   }, 
   "dependencies": {
     "escape-string-regexp": "2.0.0",
@@ -51,6 +50,7 @@
     "@typescript-eslint/parser": "2.1.0",
     "appium": "1.17.0",
     "eslint": "6.3.0",
+    "react-native-webview-bootpay": "13.6.13",
     "eslint-config-airbnb": "18.0.1",
     "eslint-config-prettier": "6.2.0",
     "eslint-plugin-import": "2.18.2",
