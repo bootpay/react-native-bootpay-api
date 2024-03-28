@@ -1,3 +1,9 @@
+### 13.8.4
+- ssl error 발생시 안드로이드는 소프트업데이트로 안내
+
+### 13.8.2
+- react-native, webview version update
+
 ### 13.6.13
 - webview version update
 

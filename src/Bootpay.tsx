@@ -8,6 +8,7 @@ import WebView, {WebViewMessageEvent}  from 'react-native-webview-bootpay';
 import { BootpayTypesProps, Payload, Extra, Item, User } from './BootpayTypes';
 import {debounce} from 'lodash';
 import UserInfo from './UserInfo'     
+import { WebViewErrorEvent } from 'react-native-webview-bootpay/lib/BPCWebViewNativeComponent';
 // import  Loader from './Loader'
 // import ClipLoader  from "react-spinners/ClipLoader";
 // import Spinner from 'react-native-loading-spinner-overlay';
@@ -34,7 +35,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
         isShowProgress: false 
     }   
     // _payload = {}
-    _VERSION = "4.3.1"
+    _VERSION = "13.8.2"
     _DEBUG = false;
 
 
@@ -60,13 +61,17 @@ export class Bootpay extends Component<BootpayTypesProps> {
         if(this.props.onClose != undefined) this.props.onClose();
         this.dismiss();
     }
+ 
 
 
     onMessage = async (event: WebViewMessageEvent) => {  
 
         if (event == undefined) return;
+        console.log(event.nativeEvent.data);
 
         const res = JSON.parse(JSON.stringify(event.nativeEvent.data));
+
+        console.log(res);
   
     
         if(res == 'close') {
@@ -299,7 +304,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
         this.closeDismiss = debounce(this.closeDismiss, 30); 
     } 
  
-    render() {
+    render() { 
         return (  
             <Modal
                 animationType={'slide'}
@@ -339,13 +344,34 @@ export class Bootpay extends Component<BootpayTypesProps> {
                         ref={this.webView}  
                         originWhitelist={['*']}
                         source={{
-                            uri: 'https://webview.bootpay.co.kr/4.3.3'
+                            uri: 'https://webview.bootpay.co.kr/5.0.0-beta.25'
                         }} 
                         injectedJavaScript={this.state.script}
                         javaScriptEnabled={true}
                         javaScriptCanOpenWindowsAutomatically={true}
                         // scalesPageToFit={true} 
-                        onMessage={this.onMessage}
+                        onMessage={this.onMessage} 
+                        onError={(syntheticEvent) => {
+                            const { nativeEvent } = syntheticEvent;
+                            if(nativeEvent.code == 3) {
+                                this.showProgressBar(false);
+                                if(this.props.onError != undefined) this.props.onError({
+                                    code: nativeEvent.code,
+                                    message: nativeEvent.description
+                                }); 
+                                this.closeDismiss();  
+                            }
+                        }}
+                        // onError={ error => {
+                        //     if(error.code == 3) {
+                        //         console.log()
+                        //     }
+                        // }}
+                        // onError={syntheticEvent => {
+                        //     const { nativeEvent } = syntheticEvent;
+                        //     console.warn('WebView error: ', nativeEvent);
+                        //   }}
+                        // onError={}
                     />
                 </SafeAreaView> 
                 
@@ -354,6 +380,9 @@ export class Bootpay extends Component<BootpayTypesProps> {
         )
     }
 
+    // onMessage = async (event: WebViewMessageEvent) => {  
+
+   
  
 
     requestPayment = async (payload: Payload, items: [Item], user: User, extra: Extra) => {     
