@@ -1,3 +1,6 @@
+### 13.8.42
+- 설정 재배포 
+
 ### 13.8.41
 - webview version update
 
