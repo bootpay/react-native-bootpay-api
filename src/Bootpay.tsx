@@ -8,10 +8,7 @@ import WebView, {WebViewMessageEvent}  from 'react-native-webview-bootpay';
 import { BootpayTypesProps, Payload, Extra, Item, User } from './BootpayTypes';
 import {debounce} from 'lodash';
 import UserInfo from './UserInfo'     
-import { WebViewErrorEvent } from 'react-native-webview-bootpay/lib/BPCWebViewNativeComponent';
-// import  Loader from './Loader'
-// import ClipLoader  from "react-spinners/ClipLoader";
-// import Spinner from 'react-native-loading-spinner-overlay';
+ 
 
 
 export class Bootpay extends Component<BootpayTypesProps> {
@@ -35,7 +32,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
         isShowProgress: false 
     }   
     // _payload = {}
-    _VERSION = "13.8.2"
+    _VERSION = "13.13.4"
     _DEBUG = false;
 
 
@@ -344,7 +341,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
                         ref={this.webView}  
                         originWhitelist={['*']}
                         source={{
-                            uri: 'https://webview.bootpay.co.kr/5.0.0-beta.25'
+                            uri: 'https://webview.bootpay.co.kr/5.1.0'
                         }} 
                         injectedJavaScript={this.state.script}
                         javaScriptEnabled={true}

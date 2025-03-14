@@ -17,8 +17,8 @@ export default function App() {
 
   const goBootpayTest = () => {   
     const payload = {
-      pg: '다날',  //['kcp', 'danal', 'inicis', 'nicepay', 'lgup', 'toss', 'payapp', 'easypay', 'jtnet', 'tpay', 'mobilians', 'payletter', 'onestore', 'welcome'] 중 택 1
-      method: '카드 ',  // ['카드', '휴대폰', '계좌이체', '가상계좌', '카카오페이', '네이버페이', '페이코', '카드자동'] 중 택 1 
+      pg: '나이스페이',  //['kcp', 'danal', 'inicis', 'nicepay', 'lgup', 'toss', 'payapp', 'easypay', 'jtnet', 'tpay', 'mobilians', 'payletter', 'onestore', 'welcome'] 중 택 1
+      method: '네이버페이',  // ['카드', '휴대폰', '계좌이체', '가상계좌', '카카오페이', '네이버페이', '페이코', '카드자동'] 중 택 1 
       order_name: '마스카라', //결제창에 보여질 상품명
       order_id: '1234_1234', //개발사에 관리하는 주문번호 
       // subscription_id: '12345_21345', //개발사에 관리하는 주문번호 (정기결제용)
@@ -68,7 +68,7 @@ export default function App() {
 
     const extra = {
       card_quota: "0,2,3",  //결제금액이 5만원 이상시 할부개월 허용범위를 설정할 수 있음, [0(일시불), 2개월, 3개월] 허용, 미설정시 12개월까지 허용 
-      app_scheme: "bootpayrnapi", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명  
+      app_scheme: "bootpaySample", //ios의 경우 카드사 앱 호출 후 되돌아오기 위한 앱 스키마명  
       show_close_button: true, // x 닫기 버튼 삽입 (닫기버튼이 없는 PG사를 위한 옵션)  
     } 
     // const extra = new Extra();

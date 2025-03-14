@@ -1,11 +1,11 @@
 {
-  "include": ["src/*"],
+  "include": ["src/**/*"],
   "compilerOptions": {
     "baseUrl": "./src/",
     "jsx": "react-native",
     "module": "esnext",
     "moduleResolution": "node",
-    "lib": ["es2017"],
+    "lib": ["esnext"],
     "declaration": true,
     "declarationMap": true,
     "outDir": "lib",
@@ -22,6 +22,32 @@
     "strict": true
   }
 }
+
+
+// {
+//   "include": ["src/*"],
+//   "compilerOptions": {
+//     "baseUrl": "./src/",
+//     "jsx": "react-native",
+//     "module": "esnext",
+//     "moduleResolution": "node",
+//     "lib": ["es2017"],
+//     "declaration": true,
+//     "declarationMap": true,
+//     "outDir": "lib",
+//     "allowSyntheticDefaultImports": true,
+//     "esModuleInterop": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "noFallthroughCasesInSwitch": true,
+//     "noImplicitReturns": true,
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "pretty": true,
+//     "resolveJsonModule": true,
+//     "skipLibCheck": true,
+//     "strict": true
+//   }
+// }
 
 
 // {
