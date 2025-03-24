@@ -105,7 +105,6 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
     try {
       const res = JSON.parse(event.nativeEvent.data);
-    //   console.log(res);
 
       if (res === 'close') {
         this.showProgressBar(false);
@@ -115,7 +114,6 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
       const data = typeof res === 'string' ? JSON.parse(res) : res;
 
-    //   let redirect = false;
       let show_success = false;
       let show_error = false;
 
