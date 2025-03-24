@@ -858,8 +858,6 @@ PODS:
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-sensitive-info (5.5.8):
-    - React
   - react-native-webview-bootpay (13.13.423):
     - glog
     - RCT-Folly (= 2022.05.16.00)
@@ -1039,6 +1037,10 @@ PODS:
   - ReactTestApp-Resources (1.0.0-dev)
   - RNDeviceInfo (14.0.4):
     - React-Core
+  - RNKeychain (10.0.0):
+    - glog
+    - RCT-Folly (= 2022.05.16.00)
+    - React-Core
   - SocketRocket (0.6.1)
   - Yoga (1.14.0)
 
@@ -1073,7 +1075,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../../node_modules/react-native/ReactCommon`)
   - react-native-aes (from `../../node_modules/react-native-aes-crypto`)
   - react-native-bootpay-api (from `../..`)
-  - react-native-sensitive-info (from `../../node_modules/react-native-sensitive-info`)
   - react-native-webview-bootpay (from `../../node_modules/react-native-webview-bootpay`)
   - React-nativeconfig (from `../../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1099,6 +1100,7 @@ DEPENDENCIES:
   - ReactTestApp-DevSupport (from `../../node_modules/react-native-test-app`)
   - ReactTestApp-Resources (from `..`)
   - RNDeviceInfo (from `../../node_modules/react-native-device-info`)
+  - RNKeychain (from `../../node_modules/react-native-keychain`)
   - Yoga (from `../../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -1163,8 +1165,6 @@ EXTERNAL SOURCES:
     :path: "../../node_modules/react-native-aes-crypto"
   react-native-bootpay-api:
     :path: "../.."
-  react-native-sensitive-info:
-    :path: "../../node_modules/react-native-sensitive-info"
   react-native-webview-bootpay:
     :path: "../../node_modules/react-native-webview-bootpay"
   React-nativeconfig:
@@ -1215,6 +1215,8 @@ EXTERNAL SOURCES:
     :path: ".."
   RNDeviceInfo:
     :path: "../../node_modules/react-native-device-info"
+  RNKeychain:
+    :path: "../../node_modules/react-native-keychain"
   Yoga:
     :path: "../../node_modules/react-native/ReactCommon/yoga"
 
@@ -1248,7 +1250,6 @@ SPEC CHECKSUMS:
   React-Mapbuffer: ee9b45b26e759a099a3e024df50b25af390ee998
   react-native-aes: e38d08f68d27e85d14590b7ef0b404ceebf5f891
   react-native-bootpay-api: 8208171e4ae6dd74f1aa74349e1f16f3d4b8e92e
-  react-native-sensitive-info: 31674faa5e17977b394fb67986c35ef94f8ffe81
   react-native-webview-bootpay: 95666a5bd60320634c95d92309da13bae2d7add7
   React-nativeconfig: 1166714a4f7ea57a0df5c2cb44fbc70f98d580f9
   React-NativeModulesApple: 5113fb30a94471378d4b0d44e86b71c1e3ca29c8
@@ -1274,6 +1275,7 @@ SPEC CHECKSUMS:
   ReactTestApp-DevSupport: 98b4b89fdbd9ce1150ceb8699de5578eb2449680
   ReactTestApp-Resources: 857244f3a23f2b3157b364fa06cf3e8866deff9c
   RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
+  RNKeychain: 1fe24953a2c0b762e73925946667ec37122197c8
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   Yoga: a716eea57d0d3430219c0a5a233e1e93ee931eb7
 

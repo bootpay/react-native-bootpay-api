@@ -1,479 +1,338 @@
-
-
 import React, { Component } from 'react';
-import { SafeAreaView, Modal, TouchableOpacity, Image, StyleSheet, Platform } from 'react-native';
-// import {  StyleSheet, Platform } from 'react-native';
-// import {  Platform, StyleSheet, Dimensions } from 'react-native';
-import WebView, {WebViewMessageEvent}  from 'react-native-webview-bootpay';
-import { BootpayTypesProps, Payload, Extra, Item, User } from './BootpayTypes';
-import {debounce} from 'lodash';
-import UserInfo from './UserInfo'     
- 
+import {
+  SafeAreaView,
+  Modal,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Platform,
+} from 'react-native';
+import WebView, { WebViewMessageEvent } from 'react-native-webview-bootpay';
+import { BootpayTypesProps, Payload, Item, User, Extra } from './BootpayTypes';
+import { debounce } from 'lodash';
+import UserInfo from './UserInfo';
 
+const SDK_VERSION = '13.13.4';
+const DEBUG_MODE = false;
 
 export class Bootpay extends Component<BootpayTypesProps> {
-    // webView = useRef<WebView>(null); 
-
-    webView: React.RefObject<WebView>;
-    
-    constructor(props: BootpayTypesProps) {
-        super(props);
-
-        this.webView = React.createRef();
-    }
-
-    payload?: Payload
-
-    state = {
-        visibility: false, 
-        script: '',
-        firstLoad: false,
-        showCloseButton: false,
-        isShowProgress: false 
-    }   
-    // _payload = {}
-    _VERSION = "13.13.4"
-    _DEBUG = false;
-
-
-    dismiss = () => { 
-        this.setState(
-            { 
-                visibility: false
-            }
-        ) 
-    }
- 
-
-    showProgressBar = (isShow: boolean) => {
-        this.setState(
-            {
-                isShowProgress: isShow
-            }
-        )
-    }
-
-
-    closeDismiss = () => { 
-        if(this.props.onClose != undefined) this.props.onClose();
-        this.dismiss();
-    }
- 
-
-
-    onMessage = async (event: WebViewMessageEvent) => {  
-
-        if (event == undefined) return;
-        console.log(event.nativeEvent.data);
-
-        const res = JSON.parse(JSON.stringify(event.nativeEvent.data));
-
-        console.log(res);
-  
-    
-        if(res == 'close') {
-            this.showProgressBar(false);
-            this.closeDismiss(); 
-            return;
-        }
-
- 
-        const data = JSON.parse(res);
-        // console.log(`redirect: ${JSON.stringify(data)}`);
-
-        var redirect = false
-        let show_success = false
-        let show_error = false
- 
-
-        if(this.payload?.extra != undefined) { 
-            if(this.payload.extra?.open_type == 'redirect') {
-                redirect = true; 
-            }
-            if(this.payload.extra?.display_error_result == true) {
-                show_error = true; 
-            }
-            if(this.payload.extra?.display_success_result == true) {
-                show_success = true; 
-            }
-            
-        }
-
-        if(redirect === true) {
-            switch (data.event) {
-                case 'cancel':
-                    this.showProgressBar(false);
-                    if(this.props.onCancel != undefined) this.props.onCancel(data); 
-                    this.closeDismiss(); 
-                    break;
-                case 'error':
-                    this.showProgressBar(false);
-                    if(this.props.onError != undefined) this.props.onError(data); 
-                    if(show_error == false) {
-                        this.closeDismiss(); 
-                    }
-                    break;
-                case 'issued':
-                    this.showProgressBar(false);
-                    if(this.props.onIssued != undefined) this.props.onIssued(data);
-                    if(show_success == false) {
-                        this.closeDismiss(); 
-                    }
-                    break;
-                case 'confirm':
-                    this.showProgressBar(true);
-                    // if(this.props.onConfirm != undefined) this.props.onConfirm(data);
-                    if(this.props.onConfirm != undefined) {
-                        if(this.props.onConfirm(data)) {
-                            this.transactionConfirm(); 
-                        }
-                    }
-                    break;
-                case 'done':
-                    this.showProgressBar(false);
-                    if(this.props.onDone != undefined) this.props.onDone(data); 
-                    if(show_success == false) {
-                        this.closeDismiss(); 
-                    }
-                    break;
-                case 'close':
-                    this.showProgressBar(false);
-                    this.closeDismiss(); 
-                    break; 
-            }
-        } else {
-            switch (data.event) {
-                case 'cancel':
-                    this.showProgressBar(false);
-                    if(this.props.onCancel != undefined) this.props.onCancel(data); 
-                    break;
-                case 'error':
-                    this.showProgressBar(false);
-                    if(this.props.onError != undefined) this.props.onError(data); 
-                    break;
-                case 'issued':
-                    this.showProgressBar(false);
-                    if(this.props.onIssued != undefined) this.props.onIssued(data);
-                    break;
-                case 'confirm':
-                    this.showProgressBar(true);
-                    if(this.props.onConfirm != undefined) {
-                        if(this.props.onConfirm(data)) {
-                            this.transactionConfirm(); 
-                        }
-                    }
-                    break;
-                case 'done':
-                    this.showProgressBar(false);
-                    if(this.props.onDone != undefined) this.props.onDone(data); 
-                    break;
-                case 'close':
-                    this.showProgressBar(false);
-                    this.closeDismiss(); 
-                    break; 
-            }
-        }  
-    }
-
-    onShouldStartLoadWithRequest = (_ : string) => { 
-        return true;
-    }
-
-    getSDKVersion = () => {
-        if(Platform.OS == 'ios') {
-            return "Bootpay.setVersion('" + this._VERSION + "', 'ios_react_native')"
-            // return "Bootpay.setDevice('IOS');";
-        } else if(Platform.OS == 'android'){
-            return "Bootpay.setVersion('" + this._VERSION + "', 'android_react_native')"
-            // return "Bootpay.setDevice('ANDROID');"; 
-        } else {
-            return ""
-        }
-    }
-
-    getEnvironmentMode = () => {
-        if(this._DEBUG) {
-            return "Bootpay.setEnvironmentMode('development');";
-
-        }
-        return "";
-    }
-
-    getBootpayPlatform = () => { 
-        if(Platform.OS == 'ios') {
-            return "Bootpay.setDevice('IOS');";
-        } else if(Platform.OS == 'android'){
-            return "Bootpay.setDevice('ANDROID');"; 
-        } else {
-            return ""
-        }
-    }
-
-    // setPayScript = () => {
-        // const fullScript = this.generateScript(this.state.script);
-        // this.injectJavaScript(fullScript);
-        // if(this.state.showCloseButton == true) {
-        //     if(this.webView == null || this.webView == undefined) return; 
-        //     this.webView.showCloseButton( );
-        // }
-    //  } 
-
-    transactionConfirm = () => { 
-        const script = "Bootpay.confirm()"
-         + 
-        ".then( function (res) {" + 
-        this.confirm() + 
-        this.issued() + 
-        this.done() + 
-        "}, function (res) {" +
-        this.error() + 
-        this.cancel() + 
-        "})";
-
-        this.callJavaScript(script);
-    }
-
-    removePaymentWindow = () => {
-        this.dismiss();
-        // this.callJavaScript(`
-        // Bootpay.removePaymentWindow();
-        //   `);
-    } 
-
-    callJavaScript = (script: string) => {  
-        if(this.webView == null || this.webView == undefined) return
- 
-        this.webView.current?.injectJavaScript(`
-        setTimeout(function() { ${script} }, 30);
-        `) 
-    }  
-
-    getAnalyticsData = async () => { 
-        const uuid = await UserInfo.getBootpayUUID(); 
-        // const bootpaySK = await UserInfo.getBootpaySK();
-        const bootLastTime = await UserInfo.getBootpayLastTime();      
-
-
-        const elaspedTime = Date.now() - bootLastTime;  
-        return `window.Bootpay.$analytics.setAnalyticsData({uuid:'${uuid}', time:${elaspedTime}});`;
-        // this.callJavaScript(`window.BootPay.setAnalyticsData({uuid:'${uuid}',sk:'${bootpaySK}',sk_time:${bootLastTime},time:${elaspedTime}});`); 
-    }
-
-    confirm = () => {
-        return "if (res.event === 'confirm') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
-    }
-
-    done = () => {
-        return "else if (res.event === 'done') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
-    }
-
-    issued = () => {
-        return "else if (res.event === 'issued') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
-    }
-
-    error = () => {
-        return "if (res.event === 'error') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
-    }
-
-    cancel = () => {
-        return "else if (res.event === 'cancel') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
-    }
-
-    close = () => {
-        return "document.addEventListener('bootpayclose', function (e) {  window.BootpayRNWebView.postMessage('close'); });";
-    }
-
-  
-
-    async componentWillUnmount() {
-        this.setState(
-            {
-                visibility: false, 
-                firstLoad: false,
-                showCloseButton: false
-            }
-         )
-        UserInfo.setBootpayLastTime(Date.now());
-    } 
-
-
-    componentDidMount() {
-        this.closeDismiss = debounce(this.closeDismiss, 30); 
-    } 
- 
-    render() { 
-        return (  
-            <Modal
-                animationType={'slide'}
-                transparent={false} 
-                onRequestClose={()=> { 
-                    this.closeDismiss();
-                    // console.log(1234);
-                    // this.dismiss();
-                }}
-                
-                visible={this.state.visibility}> 
-                <SafeAreaView style={{ flex: 1 }}>
-                    {
-                        this.state.showCloseButton &&
-                        <TouchableOpacity
-                            onPress={() =>  {
-                                var cancelData = {
-                                    action: 'BootpayCancel',
-                                    message: '사용자에 의해 취소되었습니다'
-                                } 
-                                
-                                if(this.props.onCancel != undefined) this.props.onCancel(cancelData);
-                                if(this.props.onClose != undefined) this.props.onClose(); 
-
-                                this.setState({visibility: false})
-
-                                // this.showProgressBar(true);
- 
-                            } }> 
-                            <Image 
-                                style={[styles.overlay]}
-                                source={require('../images/close.png')} />
-                        </TouchableOpacity>
-                    }
-                     
-                    <WebView
-                        ref={this.webView}  
-                        originWhitelist={['*']}
-                        source={{
-                            uri: 'https://webview.bootpay.co.kr/5.1.0'
-                        }} 
-                        injectedJavaScript={this.state.script}
-                        javaScriptEnabled={true}
-                        javaScriptCanOpenWindowsAutomatically={true}
-                        // scalesPageToFit={true} 
-                        onMessage={this.onMessage} 
-                        onError={(syntheticEvent) => {
-                            const { nativeEvent } = syntheticEvent;
-                            if(nativeEvent.code == 3) {
-                                this.showProgressBar(false);
-                                if(this.props.onError != undefined) this.props.onError({
-                                    code: nativeEvent.code,
-                                    message: nativeEvent.description
-                                }); 
-                                this.closeDismiss();  
-                            }
-                        }}
-                        // onError={ error => {
-                        //     if(error.code == 3) {
-                        //         console.log()
-                        //     }
-                        // }}
-                        // onError={syntheticEvent => {
-                        //     const { nativeEvent } = syntheticEvent;
-                        //     console.warn('WebView error: ', nativeEvent);
-                        //   }}
-                        // onError={}
-                    />
-                </SafeAreaView> 
-                
-
-            </Modal>  
-        )
-    }
-
-    // onMessage = async (event: WebViewMessageEvent) => {  
-
-   
- 
-
-    requestPayment = async (payload: Payload, items: [Item], user: User, extra: Extra) => {     
-        
-        this.bootpayRequest(payload, items, user, extra, "requestPayment");
-    }
-
-    requestSubscription = async (payload: Payload, items: [Item], user: User, extra: Extra) => {        
-        this.bootpayRequest(payload, items, user, extra, "requestSubscription");
-    }
-
-    requestAuthentication = async (payload: Payload, items: [Item], user: User, extra: Extra) => {        
-        this.bootpayRequest(payload, items, user, extra, "requestAuthentication");
-    }
-
-    bootpayRequest = async (payload: Payload, items: [Item], user: User, extra: Extra, requestMethod: string) => {    
-
-        payload.application_id =  Platform.OS == 'ios' ? this.props.ios_application_id : this.props.android_application_id;
-        payload.items = items;
-        payload.user = user;
-         
-
-        payload.user = Object.assign(new User(), user); //set default value from class optional parameter value
-        payload.extra = Object.assign(new Extra(), extra); //set default value from class optional parameter value
-
- 
-        this.payload = payload 
- 
-        this.setState(
-            {
-                visibility: true,
-                script: `
-                ${await this.getMountJavascript()} 
-                ${this.generateScript(payload, requestMethod)}
-                `,
-                firstLoad: false,
-                showCloseButton: extra.show_close_button || false,
-                spinner: false 
-             }
-        ) 
- 
-
-        UserInfo.updateInfo();  
-    }
-
-
-    getMountJavascript = async () => { 
-        return `
+  getMountJavascript = async () => {
+    return `
         ${this.getSDKVersion()}
         ${this.getEnvironmentMode()}
         ${this.getBootpayPlatform()}
         ${this.close()}
         ${await this.getAnalyticsData()}
-        `; 
+        `;
+  };
+
+  webView: React.RefObject<WebView>;
+  payload?: Payload;
+
+  constructor(props: BootpayTypesProps) {
+    super(props);
+    this.webView = React.createRef();
+  }
+
+  state = {
+    visibility: false,
+    script: '',
+    firstLoad: false,
+    showCloseButton: false,
+    isShowProgress: false,
+  };
+
+  dismiss = () => {
+    this.setState({ visibility: false });
+  };
+
+  showProgressBar = (isShow: boolean) => {
+    this.setState({ isShowProgress: isShow });
+  };
+
+  closeDismiss = () => {
+    if (this.props.onClose) this.props.onClose();
+    this.dismiss();
+  };
+
+  callJavaScript = (script: string) => {
+    this.webView.current?.injectJavaScript(
+      `setTimeout(function() { ${script} }, 30);`
+    );
+  };
+
+  transactionConfirm = () => {
+    const script = `
+      Bootpay.confirm()
+        .then(res => {
+          ${this.confirm()}
+          ${this.issued()}
+          ${this.done()}
+        }, res => {
+          ${this.error()}
+          ${this.cancel()}
+        });
+    `;
+    this.callJavaScript(script);
+  };
+
+  confirm = () => {
+    return "if (res.event === 'confirm') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
+  };
+
+  done = () => {
+    return "else if (res.event === 'done') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
+  };
+
+  issued = () => {
+    return "else if (res.event === 'issued') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
+  };
+
+  error = () => {
+    return "if (res.event === 'error') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
+  };
+
+  cancel = () => {
+    return "else if (res.event === 'cancel') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
+  };
+
+  close = () => {
+    return "document.addEventListener('bootpayclose', function (e) {  window.BootpayRNWebView.postMessage('close'); });";
+  };
+
+  onMessage = async (event: WebViewMessageEvent) => {
+    if (!event) return;
+
+    try {
+      const res = JSON.parse(event.nativeEvent.data);
+    //   console.log(res);
+
+      if (res === 'close') {
+        this.showProgressBar(false);
+        this.closeDismiss();
+        return;
+      }
+
+      const data = typeof res === 'string' ? JSON.parse(res) : res;
+
+    //   let redirect = false;
+      let show_success = false;
+      let show_error = false;
+
+      if (this.payload?.extra) {
+        // redirect = this.payload.extra?.open_type === 'redirect';
+        show_error = !!this.payload.extra?.display_error_result;
+        show_success = !!this.payload.extra?.display_success_result;
+      }
+
+      const handleEvent = (_eventName, callback, showResult) => {
+        this.showProgressBar(false);
+        if (callback) callback(data);
+        if (!showResult) this.closeDismiss();
+      };
+
+      switch (data.event) {
+        case 'cancel':
+          handleEvent('cancel', this.props.onCancel, false);
+          break;
+        case 'error':
+          handleEvent('error', this.props.onError, show_error);
+          break;
+        case 'issued':
+          handleEvent('issued', this.props.onIssued, show_success);
+          break;
+        case 'confirm':
+          this.showProgressBar(true);
+          if (this.props.onConfirm && this.props.onConfirm(data)) {
+            this.transactionConfirm();
+          }
+          break;
+        case 'done':
+          handleEvent('done', this.props.onDone, show_success);
+          break;
+        case 'close':
+          this.showProgressBar(false);
+          this.closeDismiss();
+          break;
+        default:
+          console.warn(`Unknown event type: ${data.event}`);
+          break;
+      }
+    } catch (error) {
+      console.error('Error processing message:', error);
     }
+  };
 
+  generateScript = (payload: Payload, requestMethod: string) => {
+    return `
+      Bootpay.${requestMethod}(${JSON.stringify(payload)})
+        .then(res => {
+          ${this.confirm()}
+          ${this.issued()}
+          ${this.done()}
+        }, res => {
+          ${this.error()}
+          ${this.cancel()}
+        });
+    `;
+  };
 
-    generateScript= (payload: Payload, requestMethod: string) => {    
-        const script = "Bootpay." + requestMethod + 
-        `(${JSON.stringify(payload)})` +
-        ".then( function (res) {" + 
-        this.confirm() + 
-        this.issued() + 
-        this.done() + 
-        "}, function (res) {" +
-        this.error() + 
-        this.cancel() + 
-        "}); void(0);";
-        
-        return script; 
-    }
+  getSDKVersion = () => {
+    const os = Platform.OS;
+    return `Bootpay.setVersion('${SDK_VERSION}', '${os}_react_native')`;
+  };
 
+  getEnvironmentMode = () => {
+    return DEBUG_MODE ? "Bootpay.setEnvironmentMode('development');" : '';
+  };
+
+  getBootpayPlatform = () => {
+    return Platform.OS === 'ios'
+      ? "Bootpay.setDevice('IOS');"
+      : "Bootpay.setDevice('ANDROID');";
+  };
+
+  async componentWillUnmount() {
+    this.setState({
+      visibility: false,
+      firstLoad: false,
+      showCloseButton: false,
+    });
+    UserInfo.setBootpayLastTime(Date.now());
+  }
+
+  componentDidMount() {
+    this.closeDismiss = debounce(this.closeDismiss, 30);
+  }
+
+  removePaymentWindow = () => {
+    this.dismiss();
+    // this.callJavaScript(`
+    // Bootpay.removePaymentWindow();
+    //   `);
+  };
+
+  getAnalyticsData = async () => {
+    const uuid = await UserInfo.getBootpayUUID();
+    const bootpaySK = await UserInfo.getBootpaySK();
+    const bootLastTime = await UserInfo.getBootpayLastTime();
+
+    const elaspedTime = Date.now() - bootLastTime;
+
+    console.log(uuid, bootpaySK, bootLastTime);
+
+    return `window.Bootpay.$analytics.setAnalyticsData({uuid:'${uuid}',sk:'${bootpaySK}',time:${elaspedTime}});`;
+  };
+
+  requestPayment = async (
+    payload: Payload,
+    items: [Item],
+    user: User,
+    extra: Extra
+  ) => {
+    this.bootpayRequest(payload, items, user, extra, 'requestPayment');
+  };
+
+  requestSubscription = async (
+    payload: Payload,
+    items: [Item],
+    user: User,
+    extra: Extra
+  ) => {
+    this.bootpayRequest(payload, items, user, extra, 'requestSubscription');
+  };
+
+  requestAuthentication = async (
+    payload: Payload,
+    items: [Item],
+    user: User,
+    extra: Extra
+  ) => {
+    this.bootpayRequest(payload, items, user, extra, 'requestAuthentication');
+  };
+
+  bootpayRequest = async (
+    payload: Payload,
+    items: [Item],
+    user: User,
+    extra: Extra,
+    requestMethod: string
+  ) => {
+    payload.application_id =
+      Platform.OS === 'ios'
+        ? this.props.ios_application_id
+        : this.props.android_application_id;
+    payload.items = items;
+    payload.user = user;
+
+    payload.user = Object.assign(new User(), user); //set default value from class optional parameter value
+    payload.extra = Object.assign(new Extra(), extra); //set default value from class optional parameter value
+
+    this.payload = payload;
+
+    this.setState({
+      visibility: true,
+      script: `
+            ${await this.getMountJavascript()} 
+            ${this.generateScript(payload, requestMethod)}
+            `,
+      firstLoad: false,
+      showCloseButton: extra.show_close_button || false,
+      spinner: false,
+    });
+
+    UserInfo.updateInfo();
+  };
+
+  render() {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={this.state.visibility}
+        onRequestClose={this.closeDismiss}
+      >
+        <SafeAreaView style={{ flex: 1 }}>
+          {this.state.showCloseButton && (
+            <TouchableOpacity onPress={this.closeDismiss}>
+              <Image
+                style={styles.overlay}
+                source={require('../images/close.png')}
+              />
+            </TouchableOpacity>
+          )}
+          <WebView
+            ref={this.webView}
+            originWhitelist={['*']}
+            source={{ uri: 'https://webview.bootpay.co.kr/5.1.0' }}
+            injectedJavaScript={this.state.script}
+            javaScriptEnabled
+            javaScriptCanOpenWindowsAutomatically
+            onMessage={this.onMessage}
+            onError={(syntheticEvent) => {
+              const { nativeEvent } = syntheticEvent;
+              if (nativeEvent.code === 3) {
+                this.showProgressBar(false);
+                if (this.props.onError)
+                  this.props.onError({
+                    code: nativeEvent.code,
+                    message: nativeEvent.description,
+                  });
+                this.closeDismiss();
+              }
+            }}
+          />
+        </SafeAreaView>
+      </Modal>
+    );
+  }
 }
 
-
-var styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: '#F5FCFF',
-    },
-    welcome: {
-      fontSize: 20,
-      textAlign: 'center',
-      margin: 10,
-    },
-    // Flex to fill, position absolute, 
-    // Fixed left/top, and the width set to the window width
-    overlay: { 
-      width: 25,
-      height: 25, 
-      right: 5,
-      alignSelf: 'flex-end'
-    }  
+const styles = StyleSheet.create({
+  overlay: {
+    width: 25,
+    height: 25,
+    right: 5,
+    alignSelf: 'flex-end',
+  },
 });
- 

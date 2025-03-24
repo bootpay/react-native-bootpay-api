@@ -41,87 +41,191 @@ const stringToHex = (str: string): string => {
 };
 
 // userTrace 함수의 반환 타입을 명시
-const userTrace = async (applicationId: string, userId: string, phone: string, email: string, gender: string, birth: string, area: string): Promise<any> => {
+const userTrace = async (
+  applicationId: string,
+  userId: string,
+  phone: string,
+  email: string,
+  gender: string,
+  birth: string,
+  area: string
+): Promise<any> => {
   try {
     const payload = {
-      "id": userId,
-      "ver": DeviceInfo.getVersion(),
-      "application_id": applicationId,
-      "phone": phone,
-      "email": email,
-      "gender": gender,
-      "birth": birth,
-      "area": area,
+      id: userId,
+      ver: DeviceInfo.getVersion(),
+      application_id: applicationId,
+      phone: phone,
+      email: email,
+      gender: gender,
+      birth: birth,
+      area: area,
     };
 
-    var key = getRandomKey(32);
-    var iv = getRandomKey(16);
+    const key = getRandomKey(32);
+    const iv = getRandomKey(16);
 
     try {
-      const data = await NativeModules.Aes.encrypt(JSON.stringify(payload), stringToHex(key), stringToHex(iv));
-      const response = await fetch(
-        'https://analytics.bootpay.co.kr/login',
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            data: data,
-            session_key: await getSessionKey(key, iv)
-          })
-        }
+      const data = await NativeModules.Aes.encrypt(
+        JSON.stringify(payload),
+        stringToHex(key),
+        stringToHex(iv)
       );
+
+      const response = await fetch('https://analytics.bootpay.co.kr/login', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: data,
+          session_key: await getSessionKey(key, iv),
+        }),
+      });
+
       const json = await response.json();
       return json;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
+
+// const userTrace = async (applicationId: string, userId: string, phone: string, email: string, gender: string, birth: string, area: string): Promise<any> => {
+//   try {
+//     const payload = {
+//       id: userId,
+//       ver: DeviceInfo.getVersion(),
+//       application_id: applicationId,
+//       phone: phone,
+//       email: email,
+//       gender: gender,
+//       birth: birth,
+//       area: area,
+//     };
+
+//     var key = getRandomKey(32);
+//     var iv = getRandomKey(16);
+
+//     try {
+//       const data = await NativeModules.Aes.encrypt(JSON.stringify(payload), stringToHex(key), stringToHex(iv));
+//       const response = await fetch(
+//         'https://analytics.bootpay.co.kr/login',
+//         {
+//           method: 'POST',
+//           headers: {
+//             Accept: 'application/json',
+//             'Content-Type': 'application/json'
+//           },
+//           body: JSON.stringify({
+//             data: data,
+//             session_key: await getSessionKey(key, iv)
+//           })
+//         }
+//       );
+//       const json = await response.json();
+//       return json;
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 // pageTrace 함수의 반환 타입을 명시
-const pageTrace = async (applicationId: string, url: string, pageType: string, items: any): Promise<any> => {
+const pageTrace = async (
+  applicationId: string,
+  url: string,
+  pageType: string,
+  items: any
+): Promise<any> => {
   try {
     const payload = {
-      "application_id": applicationId,
-      "url": url,
-      "page_type": pageType,
-      "items": items,
-      "referer": '',
+      application_id: applicationId,
+      url: url,
+      page_type: pageType,
+      items: items,
+      referer: '',
     };
 
-    var key = getRandomKey(32);
-    var iv = getRandomKey(16);
+    const key = getRandomKey(32);
+    const iv = getRandomKey(16);
 
     try {
-      const data = await NativeModules.Aes.encrypt(JSON.stringify(payload), stringToHex(key), stringToHex(iv));
-      const response = await fetch(
-        'https://analytics.bootpay.co.kr/call',
-        {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            data: data,
-            session_key: await getSessionKey(key, iv)
-          })
-        }
+      const data = await NativeModules.Aes.encrypt(
+        JSON.stringify(payload),
+        stringToHex(key),
+        stringToHex(iv)
       );
+
+      const response = await fetch('https://analytics.bootpay.co.kr/call', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          data: data,
+          session_key: await getSessionKey(key, iv),
+        }),
+      });
+
       const json = await response.json();
       return json;
     } catch (e) {
       console.log(e);
+      throw e;
     }
   } catch (error) {
     console.error(error);
+    throw error;
   }
 };
+
+// const pageTrace = async (applicationId: string, url: string, pageType: string, items: any): Promise<any> => {
+//   try {
+//     const payload = {
+//       "application_id": applicationId,
+//       "url": url,
+//       "page_type": pageType,
+//       "items": items,
+//       "referer": '',
+//     };
+
+//     var key = getRandomKey(32);
+//     var iv = getRandomKey(16);
+
+//     try {
+//       const data = await NativeModules.Aes.encrypt(JSON.stringify(payload), stringToHex(key), stringToHex(iv));
+//       const response = await fetch(
+//         'https://analytics.bootpay.co.kr/call',
+//         {
+//           method: 'POST',
+//           headers: {
+//             Accept: 'application/json',
+//             'Content-Type': 'application/json'
+//           },
+//           body: JSON.stringify({
+//             data: data,
+//             session_key: await getSessionKey(key, iv)
+//           })
+//         }
+//       );
+//       const json = await response.json();
+//       return json;
+//     } catch (e) {
+//       console.log(e);
+//     }
+//   } catch (error) {
+//     console.error(error);
+//   }
+// };
 
 // strEncode 함수의 반환 타입을 명시
 // const strEncode = async (str: string, key: string, iv: string): Promise<string> => {
