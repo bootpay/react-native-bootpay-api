@@ -1,6 +1,6 @@
 {
   "name": "react-native-bootpay-api",
-  "version": "13.13.4",
+  "version": "13.13.41",
   "description": "React Native를 위한 bootpay 라이브러리 입니다.",
   "main": "index.tsx", 
   "main-internal": "src/index.tsx",
