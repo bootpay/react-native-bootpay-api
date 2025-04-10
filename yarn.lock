@@ -12331,10 +12331,10 @@ react-native-test-app@3.7.2:
     semver "^7.3.5"
     uuid "^9.0.0"
 
-react-native-webview-bootpay@^13.13.423:
-  version "13.13.423"
-  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.13.423.tgz#db5138389efaca759245697399afef863885a6f6"
-  integrity sha512-LHDVn3J5B/H7ZGY46HsLD2L71didm7oN5jtmZfVRHP/O5IfrXD02PYhLkglW2V0fR1TKgq38lGr/yvnCiysWIw==
+react-native-webview-bootpay@13.13.44:
+  version "13.13.44"
+  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.13.44.tgz#74e464c5f8e1f7b59849d6e0e13619607e1bd4cf"
+  integrity sha512-VPvdjb9KMYJQ+H9NaMNQ/nVhHIdH3zACTNl8+Mg9k9wQoI8I4PjvBpxma3tXlB07lgY6RoB/HGw0++OyTAE8mw==
   dependencies:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"

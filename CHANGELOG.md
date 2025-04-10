@@ -1,3 +1,6 @@
+### 13.13.42
+- webview version update
+
 ### 13.13.41
 - dependencies module change to react-native-keychain
 

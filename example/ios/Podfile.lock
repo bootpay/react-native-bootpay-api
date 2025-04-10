@@ -854,11 +854,11 @@ PODS:
     - React-debug
   - react-native-aes (3.2.1):
     - React-Core
-  - react-native-bootpay-api (13.13.4):
+  - react-native-bootpay-api (13.13.41):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - react-native-webview-bootpay (13.13.423):
+  - react-native-webview-bootpay (13.13.44):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1249,8 +1249,8 @@ SPEC CHECKSUMS:
   React-logger: 4136cd22748f4275b04bf82f7b6853ba93b5e0e3
   React-Mapbuffer: ee9b45b26e759a099a3e024df50b25af390ee998
   react-native-aes: e38d08f68d27e85d14590b7ef0b404ceebf5f891
-  react-native-bootpay-api: 8208171e4ae6dd74f1aa74349e1f16f3d4b8e92e
-  react-native-webview-bootpay: 95666a5bd60320634c95d92309da13bae2d7add7
+  react-native-bootpay-api: 6e0991cb4747bbfb54ce9b3cbbb7f3b90a7d1843
+  react-native-webview-bootpay: c1ceb65f2c5dd900a6a9fcbf33bfa3f37e0f468a
   React-nativeconfig: 1166714a4f7ea57a0df5c2cb44fbc70f98d580f9
   React-NativeModulesApple: 5113fb30a94471378d4b0d44e86b71c1e3ca29c8
   React-perflogger: 0dd9f1725d55f8264b81efadd373fe1d9cca7dc2
