@@ -1,14 +1,26 @@
 import { ViewProps } from 'react-native';
 
+export interface BootpayEventData {
+  event: string;
+  receipt_id?: string;
+  order_id?: string;
+  price?: number;
+  method?: string;
+  pg?: string;
+  message?: string;
+  code?: number | string;
+  [key: string]: unknown;
+}
+
 export interface BootpayTypesProps extends ViewProps {
-  ref?: any;
+  ref?: React.RefObject<unknown>;
   ios_application_id?: string;
   android_application_id?: string;
-  onCancel?: (data: Object) => void;
-  onError?: (data: Object) => void;
-  onIssued?: (data: Object) => void;
-  onConfirm?: (data: Object) => boolean;
-  onDone?: (data: Object) => void;
+  onCancel?: (data: BootpayEventData) => void;
+  onError?: (data: BootpayEventData) => void;
+  onIssued?: (data: BootpayEventData) => void;
+  onConfirm?: (data: BootpayEventData) => boolean;
+  onDone?: (data: BootpayEventData) => void;
   onClose?: () => void;
 }
 
@@ -110,7 +122,7 @@ export class Payload {
   order_id?: string;
   subscription_id?: string;
   authentication_id?: string;
-  metadata?: Object;
+  metadata?: Record<string, unknown>;
   user_token?: string;
   extra?: Extra;
   user?: User;

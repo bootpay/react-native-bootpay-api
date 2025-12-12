@@ -190,7 +190,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
       : "Bootpay.setDevice('ANDROID');";
   };
 
-  async componentWillUnmount() {
+  componentWillUnmount() {
     this.setState({
       visibility: false,
       firstLoad: false,
@@ -217,7 +217,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
     const elaspedTime = Date.now() - bootLastTime;
 
-    console.log(uuid, bootpaySK, bootLastTime);
+    if (DEBUG_MODE) console.log('analytics:', uuid, bootpaySK, bootLastTime);
 
     return `window.Bootpay.$analytics.setAnalyticsData({uuid:'${uuid}',sk:'${bootpaySK}',time:${elaspedTime}});`;
   };
