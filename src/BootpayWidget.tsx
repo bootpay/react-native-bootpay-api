@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {
-  View,
-  Modal,
   SafeAreaView,
   StyleSheet,
   Platform,
   Animated,
   BackHandler,
   NativeEventSubscription,
+  Dimensions,
 } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview-bootpay';
 import {
@@ -30,32 +29,74 @@ interface BootpayWidgetState {
   widgetHeight: number;
   isReady: boolean;
   paymentResult: PaymentResult;
+  screenWidth: number;
+  screenHeight: number;
 }
 
+/**
+ * BootpayWidget - 인라인 위젯 방식의 결제 컴포넌트
+ *
+ * Flutter의 BootpayWebView + BootpayHeroWebView와 동일한 동작:
+ * 1. 화면에 작은 WebView 위젯으로 표시 (widget.html 로드)
+ * 2. 사용자가 결제수단 선택 및 약관 동의
+ * 3. requestPayment() 호출 시 같은 WebView가 전체화면으로 전환
+ * 4. 결제 완료/취소/에러 시 위젯 상태로 복귀
+ * 5. 위젯 리로드하여 다시 결제 준비 상태로
+ *
+ * 핵심: 동일한 WebView 인스턴스를 유지하여 결제 상태 보존
+ */
 export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetState> {
   webView: React.RefObject<WebView>;
   payload?: WidgetPayload;
   backHandler?: NativeEventSubscription;
-  fadeAnim: Animated.Value;
+  animatedTop: Animated.Value;
+  animatedLeft: Animated.Value;
+  animatedWidth: Animated.Value;
+  animatedHeight: Animated.Value;
 
   constructor(props: BootpayWidgetProps) {
     super(props);
     this.webView = React.createRef();
-    this.fadeAnim = new Animated.Value(0);
+
+    const { width, height } = Dimensions.get('window');
+    const initialHeight = props.height || 516;
+
+    // 애니메이션 값 초기화 (위젯 모드 크기)
+    this.animatedTop = new Animated.Value(0);
+    this.animatedLeft = new Animated.Value(0);
+    this.animatedWidth = new Animated.Value(width);
+    this.animatedHeight = new Animated.Value(initialHeight);
+
     this.state = {
       isFullScreen: false,
-      widgetHeight: props.height || 516,
+      widgetHeight: initialHeight,
       isReady: false,
       paymentResult: 'NONE',
+      screenWidth: width,
+      screenHeight: height,
     };
   }
 
   componentDidMount() {
     this.closeDismiss = debounce(this.closeDismiss, 30);
+
+    // 화면 크기 변경 감지
+    const subscription = Dimensions.addEventListener('change', ({ window }) => {
+      this.setState({
+        screenWidth: window.width,
+        screenHeight: window.height,
+      });
+    });
+
+    // cleanup을 위해 저장
+    this._dimensionsSubscription = subscription;
   }
+
+  _dimensionsSubscription?: { remove: () => void };
 
   componentWillUnmount() {
     this.removeBackHandler();
+    this._dimensionsSubscription?.remove();
     UserInfo.setBootpayLastTime(Date.now());
   }
 
@@ -79,26 +120,39 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
     }
   };
 
-  // Widget을 전체화면으로 전환
+  // Widget을 전체화면으로 전환 (동일 WebView 유지)
   goFullScreen = () => {
     this.setupBackHandler();
     this.setState({ isFullScreen: true, paymentResult: 'NONE' });
-    Animated.timing(this.fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+
+    const { screenHeight } = this.state;
+
+    // 위젯에서 전체화면으로 애니메이션
+    Animated.parallel([
+      Animated.timing(this.animatedHeight, {
+        toValue: screenHeight,
+        duration: 300,
+        useNativeDriver: false,
+      }),
+    ]).start();
   };
 
-  // 전체화면에서 Widget으로 복귀
+  // 전체화면에서 Widget으로 복귀 (동일 WebView 유지)
   revertToWidget = () => {
     this.removeBackHandler();
-    Animated.timing(this.fadeAnim, {
-      toValue: 0,
-      duration: 200,
-      useNativeDriver: true,
-    }).start(() => {
+
+    const { widgetHeight } = this.state;
+
+    // 전체화면에서 위젯으로 애니메이션
+    Animated.parallel([
+      Animated.timing(this.animatedHeight, {
+        toValue: widgetHeight,
+        duration: 200,
+        useNativeDriver: false,
+      }),
+    ]).start(() => {
       this.setState({ isFullScreen: false });
+
       // Widget 상태 리셋 - 웹뷰 리로드
       this.reloadWidget();
 
@@ -148,7 +202,7 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
     );
   };
 
-  // Widget 렌더링 (초기 설정)
+  // Widget 렌더링 (초기 설정) - 반드시 먼저 호출해야 함
   renderWidget = (payload: WidgetPayload) => {
     this.payload = payload;
     payload.application_id =
@@ -157,6 +211,11 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
         : this.props.android_application_id;
 
     UserInfo.updateInfo();
+
+    // WebView가 이미 로드되었으면 바로 렌더링
+    if (this.state.isReady) {
+      this.callJavaScript(this.getRenderWidgetJS());
+    }
   };
 
   // 결제 요청 (Widget에서 전체화면으로 전환 후 결제)
@@ -298,10 +357,14 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
       this.changeMethodWatch(),
       this.changeTermsWatch(),
       this.closeEventHandler(),
-      this.getRenderWidgetJS(),
     ].filter(Boolean).join('\n');
 
     this.callJavaScript(scripts);
+
+    // payload가 이미 설정되어 있으면 렌더링
+    if (this.payload) {
+      this.callJavaScript(this.getRenderWidgetJS());
+    }
   };
 
   // WebView 메시지 핸들러
@@ -328,6 +391,14 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
           if (data.detail?.height) {
             const height = parseFloat(data.detail.height);
             this.setState({ widgetHeight: height });
+            // 위젯 모드일 때만 높이 애니메이션 적용
+            if (!this.state.isFullScreen) {
+              Animated.timing(this.animatedHeight, {
+                toValue: height,
+                duration: 100,
+                useNativeDriver: false,
+              }).start();
+            }
             if (this.props.onWidgetResize) {
               this.props.onWidgetResize(height);
             }
@@ -348,7 +419,7 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
           }
           break;
 
-        // Full screen transition events
+        // Full screen transition events (from web)
         case 'bootpayWidgetFullSizeScreen':
           this.goFullScreen();
           break;
@@ -412,92 +483,74 @@ export class BootpayWidget extends Component<BootpayWidgetProps, BootpayWidgetSt
     }
   };
 
-  renderWebView = () => {
-    return (
-      <WebView
-        ref={this.webView}
-        originWhitelist={['*']}
-        source={{ uri: WIDGET_URL }}
-        javaScriptEnabled
-        javaScriptCanOpenWindowsAutomatically
-        onLoadEnd={this.onLoadEnd}
-        onMessage={this.onMessage}
-        style={styles.webview}
-        onError={(syntheticEvent) => {
-          const { nativeEvent } = syntheticEvent;
-          if (DEBUG_MODE) {
-            console.error('WebView error:', nativeEvent);
-          }
-          if (this.props.onError) {
-            this.props.onError({
-              event: 'error',
-              code: nativeEvent.code,
-              message: nativeEvent.description,
-            });
-          }
-        }}
-      />
-    );
-  };
-
   render() {
-    const { isFullScreen, widgetHeight } = this.state;
+    const { isFullScreen } = this.state;
     const { style } = this.props;
 
-    // 전체화면 모드
-    if (isFullScreen) {
-      return (
-        <>
-          {/* 빈 placeholder (widget 자리) */}
-          <View style={[styles.widgetContainer, { height: widgetHeight }, style]} />
-
-          {/* 전체화면 Modal */}
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={isFullScreen}
-            onRequestClose={this.revertToWidget}
-          >
-            <SafeAreaView style={styles.fullScreenContainer}>
-              <Animated.View
-                style={[
-                  styles.fullScreenWebView,
-                  { opacity: this.fadeAnim },
-                ]}
-              >
-                {this.renderWebView()}
-              </Animated.View>
-            </SafeAreaView>
-          </Modal>
-        </>
-      );
-    }
-
-    // 위젯 모드 (인라인)
+    // WebView를 항상 렌더링하고, 애니메이션으로 크기만 변경
+    // 이렇게 하면 동일한 WebView 인스턴스가 유지됨 (Flutter와 동일)
     return (
-      <View style={[styles.widgetContainer, { height: widgetHeight }, style]}>
-        {this.renderWebView()}
-      </View>
+      <Animated.View
+        style={[
+          styles.container,
+          style,
+          {
+            height: this.animatedHeight,
+          },
+          isFullScreen && styles.fullScreenContainer,
+        ]}
+      >
+        {isFullScreen && <SafeAreaView style={styles.safeArea} />}
+        <WebView
+          ref={this.webView}
+          originWhitelist={['*']}
+          source={{ uri: WIDGET_URL }}
+          javaScriptEnabled
+          javaScriptCanOpenWindowsAutomatically
+          onLoadEnd={this.onLoadEnd}
+          onMessage={this.onMessage}
+          style={styles.webview}
+          onError={(syntheticEvent) => {
+            const { nativeEvent } = syntheticEvent;
+            if (DEBUG_MODE) {
+              console.error('WebView error:', nativeEvent);
+            }
+            if (this.props.onError) {
+              this.props.onError({
+                event: 'error',
+                code: nativeEvent.code,
+                message: nativeEvent.description,
+              });
+            }
+          }}
+        />
+        {isFullScreen && <SafeAreaView style={styles.safeArea} />}
+      </Animated.View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  widgetContainer: {
+  container: {
     width: '100%',
     backgroundColor: '#fff',
     overflow: 'hidden',
   },
+  fullScreenContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 9999,
+    elevation: 9999, // Android
+  },
+  safeArea: {
+    backgroundColor: '#fff',
+  },
   webview: {
     flex: 1,
     backgroundColor: 'transparent',
-  },
-  fullScreenContainer: {
-    flex: 1,
-    backgroundColor: '#fff',
-  },
-  fullScreenWebView: {
-    flex: 1,
   },
 });
 
