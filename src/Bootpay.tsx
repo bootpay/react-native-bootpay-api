@@ -8,7 +8,7 @@ import {
   Platform,
 } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview-bootpay';
-import { BootpayTypesProps, Payload, Item, User, Extra } from './BootpayTypes';
+import { BootpayTypesProps, BootpayEventData, Payload, Item, User, Extra } from './BootpayTypes';
 import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
 
@@ -123,9 +123,13 @@ export class Bootpay extends Component<BootpayTypesProps> {
         show_success = !!this.payload.extra?.display_success_result;
       }
 
-      const handleEvent = (_eventName, callback, showResult) => {
+      const handleEvent = (
+        _eventName: string,
+        callback: ((data: BootpayEventData) => void) | undefined,
+        showResult: boolean
+      ) => {
         this.showProgressBar(false);
-        if (callback) callback(data);
+        if (callback) callback(data as BootpayEventData);
         if (!showResult) this.closeDismiss();
       };
 
@@ -313,6 +317,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
                 this.showProgressBar(false);
                 if (this.props.onError)
                   this.props.onError({
+                    event: 'error',
                     code: nativeEvent.code,
                     message: nativeEvent.description,
                   });
