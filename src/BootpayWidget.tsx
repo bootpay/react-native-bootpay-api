@@ -24,7 +24,7 @@ import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
 
 const SDK_VERSION = '13.13.4';
-const DEBUG_MODE = true; // 디버그 모드 활성화
+const DEBUG_MODE = false; // 디버그 모드 비활성화
 const WIDGET_URL = 'https://webview.bootpay.co.kr/5.2.2/widget.html';
 
 type PaymentResult = 'DONE' | 'ERROR' | 'CANCEL' | 'NONE';
@@ -133,11 +133,27 @@ export class BootpayWidget extends Component<
 
         // 화면의 40% 이상 스와이프하면 닫기
         if (translationX > screenWidth * 0.4) {
-          // Android 백버튼과 동일: 바로 revertToWidget 호출
-          // revertToWidget에서 reloadWidget → 위젯 rerender → isFullScreen: false
-          this.swipeAnimatedValue.setValue(0);
-          this.setState({ isSwiping: false });
-          this.revertToWidget();
+          // 1. 먼저 위젯 reload 시작 (백그라운드에서 로드)
+          this._widgetRendered = false;
+          this.callJavaScript(`window.location.href = '${WIDGET_URL}';`);
+
+          // 2. 화면 밖으로 슬라이드 애니메이션
+          Animated.timing(this.swipeAnimatedValue, {
+            toValue: screenWidth,
+            duration: 200,
+            useNativeDriver: true,
+          }).start(() => {
+            // 3. 애니메이션 완료 후 위젯 모드로 전환
+            this.swipeAnimatedValue.setValue(0);
+            this.setState({ isSwiping: false, isFullScreen: false, isReady: false });
+            this._isProcessingPayment = false;
+            this.removeBackHandler();
+
+            // onClose 콜백 호출
+            if (this.props.onClose) {
+              this.props.onClose();
+            }
+          });
         } else {
           // 원위치로 복귀
           Animated.spring(this.swipeAnimatedValue, {
@@ -1050,8 +1066,6 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: '#fff',
     overflow: 'hidden',
-    borderWidth: DEBUG_MODE ? 2 : 0, // 디버그용 빨간 테두리
-    borderColor: 'red',
   },
   hidden: {
     height: 0,

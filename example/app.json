@@ -1,45 +1,4 @@
 {
   "name": "example",
-  "displayName": "example",
-  "components": [
-    {
-      "appKey": "example",
-      "displayName": "example"
-    }
-  ],
-  "ios": {
-    "infoPlist": {
-      "NSAppTransportSecurity": {
-        "NSAllowsArbitraryLoads": true,
-        "NSAllowsArbitraryLoadsInWebContent": true,
-        "NSAllowsLocalNetworking": true
-      },
-      "CFBundleURLTypes": [
-        {
-          "CFBundleURLSchemes": ["bootpayexample"]
-        }
-      ]
-    }
-  },
-  "resources": {
-    "android": [
-      "dist/res",
-      "dist/main.android.jsbundle"
-    ],
-    "ios": [
-      "dist/assets",
-      "dist/main.ios.jsbundle"
-    ],
-    "macos": [
-      "dist/assets",
-      "dist/main.macos.jsbundle"
-    ],
-    "windows": [
-      "dist/assets",
-      "dist/main.windows.bundle"
-    ]
-  },
-  "windows": {
-    "appxManifest": "windows/Package.appxmanifest"
-  }
+  "displayName": "example"
 }

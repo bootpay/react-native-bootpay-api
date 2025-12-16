@@ -5,6 +5,6 @@
       location = "group:Pods/Pods.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:../../node_modules/.generated/ios/ReactTestApp.xcodeproj">
-   </FileRef> 
+      location = "group:example.xcodeproj">
+   </FileRef>
 </Workspace>

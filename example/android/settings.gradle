@@ -1,12 +1,6 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        mavenLocal()
-        google()
-    }
-}
-
-rootProject.name = "example"
-
-apply(from: "../../node_modules/react-native-test-app/test-app.gradle")
-applyTestAppSettings(settings)
+pluginManagement { includeBuild("../node_modules/@react-native/gradle-plugin") }
+plugins { id("com.facebook.react.settings") }
+extensions.configure(com.facebook.react.ReactSettingsExtension){ ex -> ex.autolinkLibrariesFromCommand() }
+rootProject.name = 'example'
+include ':app'
+includeBuild('../node_modules/@react-native/gradle-plugin')

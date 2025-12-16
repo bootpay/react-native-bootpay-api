@@ -79,10 +79,11 @@ export default function App() {
       price: PRICE,
       order_id: `order_${Date.now()}`,
       extra: {
-        app_scheme: 'bootpayFlutterExample',
+        app_scheme: 'bootpayReactNativeExample',
         separately_confirmed: true,
         display_success_result: false,
         display_error_result: false,
+        show_close_button: false, // 위젯 모드에서는 닫기 버튼 숨김
       },
     };
   }, []);
@@ -224,20 +225,12 @@ export default function App() {
       {/* Widget 결제 화면 */}
       {currentScreen === 'widgetPayment' && (
         <>
-          {/* 헤더 with 뒤로가기 버튼 */}
-          <View style={styles.screenHeader}>
-            <TouchableOpacity style={styles.backButton} onPress={goBack}>
-              <Text style={styles.backButtonText}>← 뒤로</Text>
-            </TouchableOpacity>
-            <Text style={styles.screenTitle}>위젯 결제</Text>
-            <View style={styles.backButton} />
-          </View>
-
           {/* Widget 결제 컨텐츠 */}
           <WidgetPaymentContent
             widgetHeight={widgetHeight}
             isCompleted={isCompleted}
             goPayment={goPayment}
+            goBack={goBack}
             formatPrice={formatPrice}
             onWidgetLayout={onWidgetLayout}
             widgetPlaceholderRef={widgetPlaceholderRef}
@@ -266,18 +259,7 @@ export default function App() {
 
       {/* 일반 결제 화면 */}
       {currentScreen === 'normalPayment' && (
-        <>
-          {/* 헤더 with 뒤로가기 버튼 */}
-          <View style={styles.screenHeader}>
-            <TouchableOpacity style={styles.backButton} onPress={goBack}>
-              <Text style={styles.backButtonText}>← 뒤로</Text>
-            </TouchableOpacity>
-            <Text style={styles.screenTitle}>일반 결제</Text>
-            <View style={styles.backButton} />
-          </View>
-
-          <NormalPaymentPage bootpayRef={bootpay} />
-        </>
+        <NormalPaymentPage bootpayRef={bootpay} goBack={goBack} />
       )}
 
       {/* 결제 결과 화면 - Flutter의 _showPaymentResult와 동일 */}
@@ -362,6 +344,7 @@ interface WidgetPaymentContentProps {
   widgetHeight: number;
   isCompleted: boolean;
   goPayment: () => void;
+  goBack: () => void;
   formatPrice: (price: number) => string;
   onWidgetLayout: () => void;
   widgetPlaceholderRef: React.RefObject<View>;
@@ -371,12 +354,17 @@ function WidgetPaymentContent({
   widgetHeight,
   isCompleted,
   goPayment,
+  goBack,
   formatPrice,
   onWidgetLayout,
   widgetPlaceholderRef,
 }: WidgetPaymentContentProps) {
   return (
     <View style={styles.widgetPageContainer}>
+      <TouchableOpacity style={styles.backLink} onPress={goBack}>
+        <Text style={styles.backLinkText}>← 뒤로</Text>
+      </TouchableOpacity>
+
       <ScrollView style={styles.scrollView}>
         {/* 상품 정보 */}
         <View style={styles.productSection}>
@@ -414,8 +402,10 @@ function WidgetPaymentContent({
 // ============ 일반 결제 페이지 ============
 function NormalPaymentPage({
   bootpayRef,
+  goBack,
 }: {
   bootpayRef: React.RefObject<Bootpay>;
+  goBack: () => void;
 }) {
   const goBootpayTest = useCallback(() => {
     const payload = {
@@ -451,7 +441,7 @@ function NormalPaymentPage({
 
     const extra = {
       card_quota: '0,2,3',
-      app_scheme: 'bootpayFlutterExample',
+      app_scheme: 'bootpayReactNativeExample',
       show_close_button: true,
     };
 
@@ -468,7 +458,7 @@ function NormalPaymentPage({
     };
 
     const extra = {
-      app_scheme: 'bootpayFlutterExample',
+      app_scheme: 'bootpayReactNativeExample',
       show_close_button: true,
     };
 
@@ -503,14 +493,20 @@ function NormalPaymentPage({
   }, []);
 
   return (
-    <View style={styles.normalContent}>
-      <TouchableOpacity style={styles.button} onPress={goBootpayTest}>
-        <Text>일반결제 테스트</Text>
+    <View style={styles.normalPageContainer}>
+      <TouchableOpacity style={styles.backLink} onPress={goBack}>
+        <Text style={styles.backLinkText}>← 뒤로</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={goBootpaySubscriptionTest}>
-        <Text>정기결제 테스트</Text>
-      </TouchableOpacity>
+      <View style={styles.normalContent}>
+        <TouchableOpacity style={styles.button} onPress={goBootpayTest}>
+          <Text>일반결제 테스트</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.button} onPress={goBootpaySubscriptionTest}>
+          <Text>정기결제 테스트</Text>
+        </TouchableOpacity>
+      </View>
 
       <Bootpay
         ref={bootpayRef}
@@ -592,6 +588,22 @@ const styles = StyleSheet.create({
     color: '#333',
   },
 
+  // 뒤로가기 링크 스타일
+  backLink: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    backgroundColor: '#fff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  backLinkText: {
+    fontSize: 16,
+    color: '#3182f6',
+    fontWeight: '500',
+  },
+
   // Widget Page Styles
   widgetPageContainer: {
     flex: 1,
@@ -629,9 +641,6 @@ const styles = StyleSheet.create({
   },
   widgetWrapper: {
     backgroundColor: '#fff',
-    borderWidth: 2,
-    borderColor: 'red',
-    borderStyle: 'dashed',
   },
   payButtonContainer: {
     padding: 16,

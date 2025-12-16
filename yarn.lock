@@ -2580,11 +2580,6 @@
     "@rnx-kit/tools-react-native" "^2.3.1"
     "@rnx-kit/tools-workspaces" "^0.2.0"
 
-"@rnx-kit/react-native-host@^0.5.0":
-  version "0.5.14"
-  resolved "https://registry.yarnpkg.com/@rnx-kit/react-native-host/-/react-native-host-0.5.14.tgz#bf4c876fc04510863243f56ad59cf8edbf18765c"
-  integrity sha512-nnijRvHWWFPKujCV1jJK5vGI4oPovT6c1QW+NVgP0k8/+axYwcDxkJuEcO0Fq55UL7ztLqo4prmyeZU19t7Ccw==
-
 "@rnx-kit/tools-node@^3.0.0", "@rnx-kit/tools-node@^3.0.3":
   version "3.0.3"
   resolved "https://registry.yarnpkg.com/@rnx-kit/tools-node/-/tools-node-3.0.3.tgz#7d43de574f3de1b07df481ed30e0d7a0553afc7a"
@@ -4326,7 +4321,7 @@ cliui@^7.0.2:
     strip-ansi "^6.0.0"
     wrap-ansi "^7.0.0"
 
-cliui@^8.0.0, cliui@^8.0.1:
+cliui@^8.0.1:
   version "8.0.1"
   resolved "https://registry.yarnpkg.com/cliui/-/cliui-8.0.1.tgz#0c04b075db02cbfe60dc8e6cf2f5486b1a3608aa"
   integrity sha512-BSeNnyus75C4//NQ9gQt1/csTXyo/8Sb+afLAkzAptFuMsod9HFokGNudZpi/oQV73hnVK+sR+5PVRMd+Dr7YQ==
@@ -5597,7 +5592,7 @@ fast-uri@^3.0.1:
   resolved "https://registry.yarnpkg.com/fast-uri/-/fast-uri-3.1.0.tgz#66eecff6c764c0df9b762e62ca7edcfb53b4edfa"
   integrity sha512-iPeeDKJSWf4IEOasVVrknXpaBV0IApz/gp7S2bb7Z4Lljbl2MGJRqInZiUrQwV16cpzw/D3S5j5Julj/gT52AA==
 
-fast-xml-parser@^4.0.0, fast-xml-parser@^4.0.12:
+fast-xml-parser@^4.0.12:
   version "4.5.3"
   resolved "https://registry.yarnpkg.com/fast-xml-parser/-/fast-xml-parser-4.5.3.tgz#c54d6b35aa0f23dc1ea60b6c884340c006dc6efb"
   integrity sha512-RKihhV+SHsIUGXObeVy9AXiBbFwkVk7Syp8XgwN5U3JV416+Gwp/GO9i0JYKmikykgz/UHRrrV4ROuZEo/T0ig==
@@ -10008,19 +10003,6 @@ react-native-macos@0.76.7:
     ws "^6.2.3"
     yargs "^17.6.2"
 
-react-native-test-app@3.10.22:
-  version "3.10.22"
-  resolved "https://registry.yarnpkg.com/react-native-test-app/-/react-native-test-app-3.10.22.tgz#45f10cc2bd662e8a22f4dd78f546882233e0b8ba"
-  integrity sha512-TDoE/sU70nw5aaW/T5td4HH7bigU7B3Jh2VIv66BUR9ROS3FowKwVaDAGSCc8C+9GUzSVZFNoBYzOtC6WSL+xA==
-  dependencies:
-    "@rnx-kit/react-native-host" "^0.5.0"
-    ajv "^8.0.0"
-    cliui "^8.0.0"
-    fast-xml-parser "^4.0.0"
-    prompts "^2.4.0"
-    semver "^7.3.5"
-    uuid "^10.0.0"
-
 react-native-webview-bootpay@13.13.47:
   version "13.13.47"
   resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.13.47.tgz#0c6053862470e317280b461faffa29d4cbee255d"
@@ -11903,11 +11885,6 @@ uuid@11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-11.1.0.tgz#9549028be1753bb934fc96e2bca09bb4105ae912"
   integrity sha512-0/A9rDy9P7cJ+8w1c9WD9V//9Wj15Ce2MPz8Ri6032usz+NfePxx5AcN3bN+r6ZL6jEo066/yNYB3tn4pQEx+A==
-
-uuid@^10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-10.0.0.tgz#5a95aa454e6e002725c79055fd42aaba30ca6294"
-  integrity sha512-8XkAphELsDnEGrDxUOHB3RGvXz6TeuYSGEZBOjtTtPm2lwhGBjLgOzLHB63IUWfBpNucQjND6d3AOudO+H3RWQ==
 
 v8-to-istanbul@^9.0.1:
   version "9.3.0"
