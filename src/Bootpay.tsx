@@ -8,7 +8,14 @@ import {
   Platform,
 } from 'react-native';
 import WebView, { WebViewMessageEvent } from 'react-native-webview-bootpay';
-import { BootpayTypesProps, BootpayEventData, Payload, Item, User, Extra } from './BootpayTypes';
+import {
+  BootpayTypesProps,
+  BootpayEventData,
+  Payload,
+  Item,
+  User,
+  Extra,
+} from './BootpayTypes';
 import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
 
@@ -306,7 +313,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
           <WebView
             ref={this.webView}
             originWhitelist={['*']}
-            source={{ uri: 'https://webview.bootpay.co.kr/5.1.0' }}
+            source={{ uri: 'https://webview.bootpay.co.kr/5.2.2' }}
             injectedJavaScript={this.state.script}
             javaScriptEnabled
             javaScriptCanOpenWindowsAutomatically

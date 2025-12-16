@@ -13,7 +13,10 @@ export default class UserInfo {
       console.error(`Error setting Bootpay info for key ${key}:`, error);
 
       // 특정 에러 코드에 따라 처리 (iOS와 Android 모두 고려)
-      if (error instanceof Error && error.message.includes('null is not an object')) {
+      if (
+        error instanceof Error &&
+        error.message.includes('null is not an object')
+      ) {
         console.warn('Keychain configuration or capability might be missing.');
       }
 

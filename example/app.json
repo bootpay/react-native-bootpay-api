@@ -7,6 +7,20 @@
       "displayName": "example"
     }
   ],
+  "ios": {
+    "infoPlist": {
+      "NSAppTransportSecurity": {
+        "NSAllowsArbitraryLoads": true,
+        "NSAllowsArbitraryLoadsInWebContent": true,
+        "NSAllowsLocalNetworking": true
+      },
+      "CFBundleURLTypes": [
+        {
+          "CFBundleURLSchemes": ["bootpayexample"]
+        }
+      ]
+    }
+  },
   "resources": {
     "android": [
       "dist/res",
