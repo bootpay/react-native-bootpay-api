@@ -60,6 +60,7 @@ export interface BootpayWidgetProps {
   // 스타일
   height?: number;
   style?: object;
+  widgetTop?: number; // Widget 위치 (위젯 모드에서 position: absolute의 top 값)
 }
 
 export class WidgetPayload {
@@ -96,10 +97,14 @@ export class WidgetPayloadExtra {
   locale?: string;
   offer_period?: string;
   open_type?: string;
+  use_bootpay_inapp_sdk?: boolean; // native app에서 redirect를 완성도있게 지원하기 위한 옵션
+  redirect_url?: string;
 
   constructor() {
     this.separately_confirmed = true;
     this.display_success_result = false;
     this.display_error_result = false;
+    this.use_bootpay_inapp_sdk = true;
+    this.redirect_url = 'https://api.bootpay.co.kr/v2/callback';
   }
 }

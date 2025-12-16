@@ -41,13 +41,14 @@
     "react-native-keychain": "^10.0.0",
     "@types/react-native-base64": "^0.2.2",
     "react-native-aes-crypto": "^3.2.1",
-    "react-native-webview-bootpay": "13.13.47"
+    "react-native-webview-bootpay": "13.13.47",
+    "react-native-gesture-handler": "^2.20.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.0",
     "@babel/core": "^7.26.0",
     "@babel/runtime": "^7.26.0",
-    "@callstack/react-native-visionos": "0.76.7",
+    "@callstack/react-native-visionos": "0.76.2",
     "@react-native/babel-preset": "0.76.7",
     "@react-native/eslint-config": "0.76.7",
     "@react-native/metro-config": "0.76.7",
@@ -65,7 +66,7 @@
     "react": "18.3.1",
     "react-native": "0.76.7",
     "react-native-macos": "0.76.7",
-    "react-native-test-app": "3.11.7",
+    "react-native-test-app": "3.10.22",
     "react-native-windows": "0.76.7",
     "selenium-appium": "1.0.2",
     "selenium-webdriver": "4.27.0",
