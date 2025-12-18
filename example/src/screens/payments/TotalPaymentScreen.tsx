@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Modal,
 } from 'react-native';
 import { Bootpay } from 'react-native-bootpay-api';
 import {
@@ -105,19 +106,11 @@ export function TotalPaymentScreen({ onBack }: TotalPaymentScreenProps) {
     console.log('------- onClose');
   }, []);
 
-  if (showResult && paymentResult) {
-    return (
-      <PaymentResultScreen
-        result={paymentResult}
-        onConfirm={() => {
-          setShowResult(false);
-          setPaymentResult(null);
-          onBack();
-        }}
-        formatPrice={formatPrice}
-      />
-    );
-  }
+  const closePaymentResult = useCallback(() => {
+    setShowResult(false);
+    setPaymentResult(null);
+    onBack();
+  }, [onBack]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -207,73 +200,70 @@ export function TotalPaymentScreen({ onBack }: TotalPaymentScreenProps) {
         onDone={onDone}
         onClose={onClose}
       />
-    </SafeAreaView>
-  );
-}
 
-// 결제 결과 화면
-function PaymentResultScreen({
-  result,
-  onConfirm,
-  formatPrice,
-}: {
-  result: PaymentResultData;
-  onConfirm: () => void;
-  formatPrice: (price: number) => string;
-}) {
-  return (
-    <SafeAreaView style={styles.resultContainer}>
-      <View style={styles.header}>
-        <View style={styles.backButton} />
-        <Text style={styles.headerTitle}>결제 완료</Text>
-        <View style={styles.headerRight} />
-      </View>
+      {/* 결제 결과 Modal */}
+      <Modal
+        visible={showResult}
+        animationType="slide"
+        transparent={false}
+        onRequestClose={closePaymentResult}
+      >
+        <SafeAreaView style={styles.resultContainer}>
+          <View style={styles.header}>
+            <View style={styles.backButton} />
+            <Text style={styles.headerTitle}>결제 완료</Text>
+            <View style={styles.headerRight} />
+          </View>
 
-      <View style={styles.resultContent}>
-        <View style={styles.resultIcon}>
-          <Text style={styles.resultIconText}>✓</Text>
-        </View>
-        <Text style={styles.resultTitle}>결제가 완료되었습니다</Text>
+          <View style={styles.resultContent}>
+            <View style={styles.resultIcon}>
+              <Text style={styles.resultIconText}>✓</Text>
+            </View>
+            <Text style={styles.resultTitle}>결제가 완료되었습니다</Text>
 
-        <View style={styles.resultDetails}>
-          {result.order_name && (
-            <View style={styles.resultRow}>
-              <Text style={styles.resultLabel}>주문명</Text>
-              <Text style={styles.resultValue}>{result.order_name}</Text>
-            </View>
-          )}
-          {result.price && (
-            <View style={styles.resultRow}>
-              <Text style={styles.resultLabel}>결제금액</Text>
-              <Text style={styles.resultValue}>{formatPrice(result.price)}</Text>
-            </View>
-          )}
-          {result.pg && result.method && (
-            <View style={styles.resultRow}>
-              <Text style={styles.resultLabel}>결제수단</Text>
-              <Text style={styles.resultValue}>{result.pg} - {result.method}</Text>
-            </View>
-          )}
-          {result.order_id && (
-            <View style={styles.resultRow}>
-              <Text style={styles.resultLabel}>주문번호</Text>
-              <Text style={styles.resultValue}>{result.order_id}</Text>
-            </View>
-          )}
-          {result.receipt_id && (
-            <View style={styles.resultRow}>
-              <Text style={styles.resultLabel}>영수증ID</Text>
-              <Text style={styles.resultValue}>{result.receipt_id}</Text>
-            </View>
-          )}
-        </View>
-      </View>
+            {paymentResult && (
+              <View style={styles.resultDetails}>
+                {paymentResult.order_name && (
+                  <View style={styles.resultRow}>
+                    <Text style={styles.resultLabel}>주문명</Text>
+                    <Text style={styles.resultValue}>{paymentResult.order_name}</Text>
+                  </View>
+                )}
+                {paymentResult.price && (
+                  <View style={styles.resultRow}>
+                    <Text style={styles.resultLabel}>결제금액</Text>
+                    <Text style={styles.resultValue}>{formatPrice(paymentResult.price)}</Text>
+                  </View>
+                )}
+                {paymentResult.pg && paymentResult.method && (
+                  <View style={styles.resultRow}>
+                    <Text style={styles.resultLabel}>결제수단</Text>
+                    <Text style={styles.resultValue}>{paymentResult.pg} - {paymentResult.method}</Text>
+                  </View>
+                )}
+                {paymentResult.order_id && (
+                  <View style={styles.resultRow}>
+                    <Text style={styles.resultLabel}>주문번호</Text>
+                    <Text style={styles.resultValue}>{paymentResult.order_id}</Text>
+                  </View>
+                )}
+                {paymentResult.receipt_id && (
+                  <View style={styles.resultRow}>
+                    <Text style={styles.resultLabel}>영수증ID</Text>
+                    <Text style={styles.resultValue}>{paymentResult.receipt_id}</Text>
+                  </View>
+                )}
+              </View>
+            )}
+          </View>
 
-      <View style={styles.payButtonContainer}>
-        <TouchableOpacity style={[styles.payButton, { backgroundColor: '#9c27b0' }]} onPress={onConfirm}>
-          <Text style={styles.payButtonText}>확인</Text>
-        </TouchableOpacity>
-      </View>
+          <View style={styles.payButtonContainer}>
+            <TouchableOpacity style={[styles.payButton, { backgroundColor: '#9c27b0' }]} onPress={closePaymentResult}>
+              <Text style={styles.payButtonText}>확인</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
