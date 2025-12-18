@@ -1,3 +1,10 @@
+### 13.13.43
+- BootpayWidget 컴포넌트 추가 (인라인 위젯 결제)
+- iOS 뒤로가기 스와이프 제스처 지원 (react-native-gesture-handler)
+- Widget/Fullscreen 전환 시 WebView 상태 유지 개선
+- example 앱 Flutter 스타일 구조로 리팩토링
+- 결제 결과 화면 Modal 방식으로 개선
+
 ### 13.13.42
 - webview version update
 
