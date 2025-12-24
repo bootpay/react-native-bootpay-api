@@ -231,11 +231,9 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
   const closePaymentResult = useCallback(() => {
     setShowResult(false);
     setPaymentResult(null);
-    // issued도 성공으로 간주하여 뒤로 이동 - iOS SDK와 동일
-    if (resultType === 'success' || resultType === 'issued') {
-      onBack();
-    }
-  }, [onBack, resultType]);
+    // 결과 화면에서 확인 버튼 누르면 항상 메인 메뉴로 이동 - iOS SDK popToRootViewController와 동일
+    onBack();
+  }, [onBack]);
 
   // iOS SDK와 동일한 결과 표시
   const getResultIcon = () => {
