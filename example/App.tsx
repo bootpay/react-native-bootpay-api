@@ -8,6 +8,7 @@ import {
   SubscriptionScreen,
   AuthenticationScreen,
   WidgetPaymentScreen,
+  CommerceScreen,
   type ScreenType,
 } from './src/screens';
 
@@ -32,6 +33,8 @@ export default function App() {
         return <AuthenticationScreen onBack={goBack} />;
       case 'widgetPayment':
         return <WidgetPaymentScreen onBack={goBack} />;
+      case 'commercePayment':
+        return <CommerceScreen onBack={goBack} />;
       default:
         return <MainMenuScreen onNavigate={setCurrentScreen} />;
     }

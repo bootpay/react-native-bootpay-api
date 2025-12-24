@@ -1,5 +1,6 @@
 import { Bootpay } from './Bootpay';
 import { BootpayWidget } from './BootpayWidget';
+import { BootpayCommerce } from './BootpayCommerce';
 import {
   Payload,
   Extra,
@@ -20,6 +21,14 @@ import {
   WidgetChangePaymentCallback,
   WidgetChangeTermsCallback,
 } from './WidgetTypes';
+import {
+  CommercePayload,
+  CommerceUser,
+  CommerceProduct,
+  CommerceExtra,
+  CommerceEventData,
+  BootpayCommerceProps,
+} from './CommerceTypes';
 
 export {
   // 기존 결제 컴포넌트
@@ -42,4 +51,12 @@ export {
   WidgetResizeCallback,
   WidgetChangePaymentCallback,
   WidgetChangeTermsCallback,
+  // Commerce 컴포넌트
+  BootpayCommerce,
+  CommercePayload,
+  CommerceUser,
+  CommerceProduct,
+  CommerceExtra,
+  CommerceEventData,
+  BootpayCommerceProps,
 };

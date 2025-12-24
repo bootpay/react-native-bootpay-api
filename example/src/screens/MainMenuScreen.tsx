@@ -13,7 +13,8 @@ export type ScreenType =
   | 'totalPayment'
   | 'subscriptionPayment'
   | 'authenticationPayment'
-  | 'widgetPayment';
+  | 'widgetPayment'
+  | 'commercePayment';
 
 interface MenuItem {
   number: number;
@@ -27,6 +28,7 @@ const MENU_ITEMS: MenuItem[] = [
   { number: 3, title: '카드자동 결제 테스트 (인증)', screen: 'subscriptionPayment' },
   { number: 4, title: '본인인증 테스트', screen: 'authenticationPayment' },
   { number: 5, title: '위젯 결제 테스트', screen: 'widgetPayment' },
+  { number: 6, title: 'Commerce 결제 테스트', screen: 'commercePayment' },
 ];
 
 interface MainMenuScreenProps {
