@@ -1,3 +1,8 @@
+### 13.13.44
+- BootpayCommerce 컴포넌트 추가 (구독/커머스 결제)
+- Commerce onIssued 콜백 추가 (가상계좌 발급 완료)
+- 결제 결과 화면에서 메인 메뉴로 pop 네비게이션 개선
+
 ### 13.13.43
 - BootpayWidget 컴포넌트 추가 (인라인 위젯 결제)
 - iOS 뒤로가기 스와이프 제스처 지원 (react-native-gesture-handler)
