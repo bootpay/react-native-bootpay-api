@@ -104,9 +104,28 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
 
   const [showResult, setShowResult] = useState(false);
   const [paymentResult, setPaymentResult] = useState<PaymentResultData | null>(null);
-  const [resultType, setResultType] = useState<'success' | 'cancel' | 'error'>('success');
+  const [resultType, setResultType] = useState<'success' | 'cancel' | 'error' | 'issued'>('success');
 
   const formatPrice = (price: number) => `₩${price.toLocaleString()}`;
+
+  // 가상계좌 입금 기한 포맷팅 - iOS SDK와 동일
+  const formatExpireDate = (dateString: string): string => {
+    try {
+      // 형식: "yyyy-MM-dd HH:mm:ss"
+      const date = new Date(dateString.replace(' ', 'T'));
+      if (isNaN(date.getTime())) return dateString;
+
+      const year = date.getFullYear();
+      const month = date.getMonth() + 1;
+      const day = date.getDate();
+      const hours = date.getHours();
+      const minutes = date.getMinutes().toString().padStart(2, '0');
+
+      return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}까지`;
+    } catch {
+      return dateString;
+    }
+  };
 
   const getPlanPrice = useCallback((planKey: string) => {
     const plan = PLAN_INFO[planKey];
@@ -197,6 +216,14 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
     setShowResult(true);
   }, []);
 
+  // 가상계좌 발급 완료 - iOS SDK와 동일
+  const onIssued = useCallback((data: unknown) => {
+    console.log('------- Commerce onIssued:', data);
+    setPaymentResult(data as PaymentResultData);
+    setResultType('issued');
+    setShowResult(true);
+  }, []);
+
   const onClose = useCallback(() => {
     console.log('------- Commerce onClose');
   }, []);
@@ -204,7 +231,8 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
   const closePaymentResult = useCallback(() => {
     setShowResult(false);
     setPaymentResult(null);
-    if (resultType === 'success') {
+    // issued도 성공으로 간주하여 뒤로 이동 - iOS SDK와 동일
+    if (resultType === 'success' || resultType === 'issued') {
       onBack();
     }
   }, [onBack, resultType]);
@@ -214,6 +242,8 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
     switch (resultType) {
       case 'success':
         return { icon: '✓', color: '#4CAF50' }; // systemGreen
+      case 'issued':
+        return { icon: '🏦', color: '#2196F3' }; // systemBlue - 가상계좌 발급
       case 'cancel':
         return { icon: '↩', color: '#FF9800' }; // systemOrange
       case 'error':
@@ -225,6 +255,8 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
     switch (resultType) {
       case 'success':
         return '구독 신청 완료'; // iOS SDK: "구독 신청 완료"
+      case 'issued':
+        return '가상계좌 발급 완료'; // iOS SDK: "가상계좌 발급 완료"
       case 'cancel':
         return '결제 취소';
       case 'error':
@@ -236,6 +268,8 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
     switch (resultType) {
       case 'success':
         return '구독이 성공적으로 시작되었습니다.';
+      case 'issued':
+        return paymentResult?.message || '가상계좌가 발급되었습니다.\n입금 후 자동으로 구독이 시작됩니다.';
       case 'cancel':
         return paymentResult?.message || '결제가 취소되었습니다.';
       case 'error':
@@ -384,6 +418,7 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
         onCancel={onCancel}
         onError={onError}
         onDone={onDone}
+        onIssued={onIssued}
         onClose={onClose}
       />
 
@@ -510,6 +545,52 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
                         {paymentResult.receipt_id}
                       </Text>
                     </View>
+                  )}
+
+                  {/* 가상계좌 정보 표시 (issued 이벤트) - iOS SDK와 동일 */}
+                  {resultType === 'issued' && (
+                    <>
+                      {(paymentResult as Record<string, unknown>).bankname && (
+                        <View style={styles.resultRow}>
+                          <Text style={styles.resultLabel}>입금 은행</Text>
+                          <Text style={styles.resultValue}>
+                            {String((paymentResult as Record<string, unknown>).bankname)}
+                          </Text>
+                        </View>
+                      )}
+                      {(paymentResult as Record<string, unknown>).account && (
+                        <View style={styles.resultRow}>
+                          <Text style={styles.resultLabel}>계좌번호</Text>
+                          <Text style={styles.resultValue}>
+                            {String((paymentResult as Record<string, unknown>).account)}
+                          </Text>
+                        </View>
+                      )}
+                      {(paymentResult as Record<string, unknown>).accounthodler && (
+                        <View style={styles.resultRow}>
+                          <Text style={styles.resultLabel}>예금주</Text>
+                          <Text style={styles.resultValue}>
+                            {String((paymentResult as Record<string, unknown>).accounthodler)}
+                          </Text>
+                        </View>
+                      )}
+                      {(paymentResult as Record<string, unknown>).expiredate && (
+                        <View style={styles.resultRow}>
+                          <Text style={styles.resultLabel}>입금 기한</Text>
+                          <Text style={styles.resultValue}>
+                            {formatExpireDate(String((paymentResult as Record<string, unknown>).expiredate))}
+                          </Text>
+                        </View>
+                      )}
+                      {paymentResult.price !== undefined && paymentResult.price > 0 && (
+                        <View style={styles.resultRow}>
+                          <Text style={styles.resultLabel}>입금 금액</Text>
+                          <Text style={[styles.resultValue, { fontWeight: 'bold', color: '#2196F3' }]}>
+                            {formatPrice(paymentResult.price)}
+                          </Text>
+                        </View>
+                      )}
+                    </>
                   )}
 
                   {/* 에러 코드 */}

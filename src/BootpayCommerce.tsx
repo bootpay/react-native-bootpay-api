@@ -270,6 +270,12 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
             this.props.onDone(data as CommerceEventData);
           }
           break;
+        case 'issued':
+          // 가상계좌 발급 완료 - iOS SDK와 동일
+          if (this.props.onIssued) {
+            this.props.onIssued(data as CommerceEventData);
+          }
+          break;
         case 'cancel':
           if (this.props.onCancel) {
             this.props.onCancel(data as CommerceEventData);
@@ -342,6 +348,10 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
           break;
         case 'done':
           handleEvent('done', this.props.onDone);
+          break;
+        case 'issued':
+          // 가상계좌 발급 완료 - iOS SDK와 동일
+          handleEvent('issued', this.props.onIssued);
           break;
         case 'close':
           this.showProgressBar(false);

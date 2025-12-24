@@ -17,6 +17,7 @@ export interface BootpayCommerceProps extends ViewProps {
   onCancel?: (data: CommerceEventData) => void;
   onError?: (data: CommerceEventData) => void;
   onDone?: (data: CommerceEventData) => void;
+  onIssued?: (data: CommerceEventData) => void; // 가상계좌 발급 완료 콜백 (iOS SDK와 동일)
   onClose?: () => void;
 }
 
