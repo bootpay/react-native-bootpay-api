@@ -11,7 +11,21 @@
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
+  // Disable automatic window loading since SceneDelegate handles it
+  self.automaticallyLoadReactNativeWindow = NO;
+
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+#pragma mark - UISceneSession lifecycle
+
+- (UISceneConfiguration *)application:(UIApplication *)application configurationForConnectingSceneSession:(UISceneSession *)connectingSceneSession options:(UISceneConnectionOptions *)options API_AVAILABLE(ios(13.0))
+{
+  return [[UISceneConfiguration alloc] initWithName:@"Default Configuration" sessionRole:connectingSceneSession.role];
+}
+
+- (void)application:(UIApplication *)application didDiscardSceneSessions:(NSSet<UISceneSession *> *)sceneSessions API_AVAILABLE(ios(13.0))
+{
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
