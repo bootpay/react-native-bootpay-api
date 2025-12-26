@@ -394,6 +394,8 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
             source={{ uri: COMMERCE_URL }}
             javaScriptEnabled
             javaScriptCanOpenWindowsAutomatically
+            useSharedProcessPool={true}
+            sharedCookiesEnabled={true}
             onMessage={this.onMessage}
             onLoadEnd={this.onLoadEnd}
             onShouldStartLoadWithRequest={this.onShouldStartLoadWithRequest}

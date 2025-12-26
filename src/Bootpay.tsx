@@ -317,6 +317,8 @@ export class Bootpay extends Component<BootpayTypesProps> {
             injectedJavaScript={this.state.script}
             javaScriptEnabled
             javaScriptCanOpenWindowsAutomatically
+            useSharedProcessPool={true}
+            sharedCookiesEnabled={true}
             onMessage={this.onMessage}
             onError={(syntheticEvent) => {
               const { nativeEvent } = syntheticEvent;

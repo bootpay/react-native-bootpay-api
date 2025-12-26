@@ -1244,7 +1244,7 @@ PODS:
     - Yoga
   - react-native-aes (3.2.1):
     - React-Core
-  - react-native-bootpay-api (13.13.42):
+  - react-native-bootpay-api (13.13.44):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1855,7 +1855,7 @@ SPEC CHECKSUMS:
   React-Mapbuffer: a381120aea722d2244d4e4b663a10d4c3b2d4e51
   React-microtasksnativemodule: d9b946675010659cddd1c7611c074216579c8ad3
   react-native-aes: e38d08f68d27e85d14590b7ef0b404ceebf5f891
-  react-native-bootpay-api: 67a66a021cc1ab77d85bdb90ecda08ba42b1dbcb
+  react-native-bootpay-api: 4012f2a3f1cdd3e3003c08672dc9a71891992ff0
   react-native-webview-bootpay: abe90818ff63d2603eed3f06cc59e7a189767820
   React-nativeconfig: 67fa7a63ea288cb5b1d0dd2deaf240405fec164f
   React-NativeModulesApple: 34b7a4d7441a4ee78d18109ff107c1ccf7c074a9

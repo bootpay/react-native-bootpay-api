@@ -967,6 +967,8 @@ export class BootpayWidget extends Component<
         source={{ uri: WIDGET_URL }}
         javaScriptEnabled
         javaScriptCanOpenWindowsAutomatically
+        useSharedProcessPool={true}
+        sharedCookiesEnabled={true}
         injectedJavaScript={this.initialScript}
         onLoadStart={() => {
           if (DEBUG_MODE) {
