@@ -1,6 +1,6 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { warmUp } from 'react-native-bootpay-api';
+// WebView 프리워밍은 SDK import 시 자동으로 수행됩니다
 
 import {
   MainMenuScreen,
@@ -15,11 +15,6 @@ import {
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<ScreenType>('main');
-
-  // 앱 시작 시 WebView 프리워밍 - 첫 결제 화면 로딩 속도 개선
-  useEffect(() => {
-    warmUp();
-  }, []);
 
   const goBack = useCallback(() => {
     setCurrentScreen('main');

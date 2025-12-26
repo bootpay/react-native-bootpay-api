@@ -321,6 +321,43 @@ const styles = StyleSheet.create({
 ```
  
 
+## WebView 프리워밍 (iOS/Android)
+
+WebView는 처음 생성 시 프로세스 초기화에 시간이 소요됩니다 (iOS: 3-7초, Android: 200-300ms).
+Bootpay SDK는 **자동으로** 패키지 import 시 백그라운드에서 프로세스를 미리 초기화하여 첫 결제 화면 로딩 속도를 개선합니다.
+
+### 자동 프리워밍
+
+SDK import 시 자동으로 프리워밍이 수행됩니다. 개발자가 별도로 호출할 필요가 없습니다.
+
+```typescript
+// 자동으로 warmUp이 수행됩니다
+import { Bootpay } from 'react-native-bootpay-api';
+```
+
+### 메모리 관리 (선택사항)
+
+메모리 부족 시 프리워밍된 리소스를 해제할 수 있습니다:
+
+```typescript
+import { releaseWarmUp } from 'react-native-bootpay-api';
+
+// 메모리 정리가 필요할 때 (선택사항)
+releaseWarmUp();
+```
+
+### 효과
+
+| 플랫폼 | 개선 효과 |
+|--------|----------|
+| iOS | WKWebView 프로세스 초기화 3-7초 단축 |
+| Android | Chromium 엔진 초기화 200-300ms 단축 |
+
+### 참고사항
+
+- 프리워밍은 SDK import 시 자동으로 수행되므로 별도 설정이 필요 없습니다.
+- 두 번째 결제부터는 ProcessPool/WebView 재사용으로 자동으로 빠릅니다.
+
 ## Documentation
 
 [부트페이 개발매뉴얼](https://docs.bootpay.co.kr/?front=react-native&backend=nodejs)을 참조해주세요

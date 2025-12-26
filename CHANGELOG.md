@@ -1,3 +1,10 @@
+### 13.13.45
+- WebView 자동 프리워밍 기능 추가 (iOS/Android)
+  - SDK import 시 자동으로 warmUp 수행 (개발자 호출 불필요)
+  - iOS: WKWebView 첫 로딩 3-7초 단축
+  - Android: Chromium 엔진 초기화 200-300ms 단축
+  - releaseWarmUp()으로 메모리 부족 시 리소스 해제 가능 (선택사항)
+
 ### 13.13.44
 - BootpayCommerce 컴포넌트 추가 (구독/커머스 결제)
 - Commerce onIssued 콜백 추가 (가상계좌 발급 완료)
