@@ -1,3 +1,8 @@
+### 13.13.46
+- iOS UIScene lifecycle 지원 추가
+  - SceneDelegate 구현으로 향후 iOS 호환성 확보
+  - "UIScene lifecycle will soon be required" 경고 해결
+
 ### 13.13.45
 - WebView 자동 프리워밍 기능 추가 (iOS/Android)
   - SDK import 시 자동으로 warmUp 수행 (개발자 호출 불필요)
