@@ -272,9 +272,13 @@ export class Bootpay extends Component<BootpayTypesProps> {
     } else if (!payload.client_key) {
       payload.application_id =
         Platform.OS === 'ios'
-          ? this.props.ios_application_id
-          : this.props.android_application_id;
+          ? (this.props.ios_application_id || payload.ios_application_id)
+          : (this.props.android_application_id || payload.android_application_id);
     }
+    // WebView JS SDK에 불필요한 플랫폼별 필드 전달 방지
+    delete payload.android_application_id;
+    delete payload.ios_application_id;
+
     payload.items = items;
     payload.user = user;
 

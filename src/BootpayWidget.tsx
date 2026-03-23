@@ -402,9 +402,12 @@ export class BootpayWidget extends Component<
     } else if (!payload.client_key) {
       payload.application_id =
         Platform.OS === 'ios'
-          ? this.props.ios_application_id
-          : this.props.android_application_id;
+          ? (this.props.ios_application_id || payload.ios_application_id)
+          : (this.props.android_application_id || payload.android_application_id);
     }
+    // WebView JS SDK에 불필요한 플랫폼별 필드 전달 방지
+    delete payload.android_application_id;
+    delete payload.ios_application_id;
 
     UserInfo.updateInfo();
 
@@ -519,9 +522,12 @@ export class BootpayWidget extends Component<
       } else if (!payload.client_key) {
         payload.application_id =
           Platform.OS === 'ios'
-            ? this.props.ios_application_id
-            : this.props.android_application_id;
+            ? (this.props.ios_application_id || payload.ios_application_id)
+            : (this.props.android_application_id || payload.android_application_id);
       }
+      // WebView JS SDK에 불필요한 플랫폼별 필드 전달 방지
+      delete payload.android_application_id;
+      delete payload.ios_application_id;
       if (items) payload.items = items;
       if (user) payload.user = Object.assign(new User(), user);
       if (extra) payload.extra = Object.assign(new Extra(), extra);
