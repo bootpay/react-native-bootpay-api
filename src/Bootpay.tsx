@@ -267,10 +267,14 @@ export class Bootpay extends Component<BootpayTypesProps> {
     extra: Extra,
     requestMethod: string
   ) => {
-    payload.application_id =
-      Platform.OS === 'ios'
-        ? this.props.ios_application_id
-        : this.props.android_application_id;
+    if (this.props.client_key) {
+      payload.client_key = this.props.client_key;
+    } else if (!payload.client_key) {
+      payload.application_id =
+        Platform.OS === 'ios'
+          ? this.props.ios_application_id
+          : this.props.android_application_id;
+    }
     payload.items = items;
     payload.user = user;
 
@@ -313,7 +317,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
           <WebView
             ref={this.webView}
             originWhitelist={['*']}
-            source={{ uri: 'https://webview.bootpay.co.kr/5.2.2' }}
+            source={{ uri: 'https://webview.bootpay.co.kr/5.3.0' }}
             injectedJavaScript={this.state.script}
             javaScriptEnabled
             javaScriptCanOpenWindowsAutomatically

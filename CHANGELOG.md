@@ -1,3 +1,10 @@
+## 13.14.0
+* webview CDN URL을 5.3.0으로 업데이트
+* client_key 인증 방식 추가 (Payload, WidgetPayload, Props 모두 지원)
+* iOS 최소 지원 버전 9.0 → 15.0으로 상향
+* macOS 최소 지원 버전 10.13 → 11.0으로 상향
+* CommerceScreen 중복 하드코딩 제거, BootpayConfig 통합
+
 ### 13.13.46
 - iOS UIScene lifecycle 지원 추가
   - SceneDelegate 구현으로 향후 iOS 호환성 확보

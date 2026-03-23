@@ -42,6 +42,7 @@ export interface BootpayWidgetProps {
   // 앱 ID
   ios_application_id?: string;
   android_application_id?: string;
+  client_key?: string;
 
   // Widget 전용 콜백
   onWidgetReady?: WidgetReadyCallback;
@@ -70,6 +71,7 @@ export class WidgetPayload {
 
   // 기본 Payload 필드
   application_id?: string;
+  client_key?: string;
   pg?: string;
   method?: string;
   methods?: string[];

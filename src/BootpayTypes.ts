@@ -16,6 +16,7 @@ export interface BootpayTypesProps extends ViewProps {
   ref?: React.RefObject<unknown>;
   ios_application_id?: string;
   android_application_id?: string;
+  client_key?: string;
   onCancel?: (data: BootpayEventData) => void;
   onError?: (data: BootpayEventData) => void;
   onIssued?: (data: BootpayEventData) => void;
@@ -111,6 +112,7 @@ export class Extra {
 
 export class Payload {
   application_id?: string;
+  client_key?: string;
   android_application_id?: string;
   ios_application_id?: string;
   pg?: string;

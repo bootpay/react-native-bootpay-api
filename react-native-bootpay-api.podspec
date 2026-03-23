@@ -1,7 +1,7 @@
 require 'json'
 
 new_arch_enabled = ENV['RCT_NEW_ARCH_ENABLED'] == '1'
-ios_platform = new_arch_enabled ? '11.0' : '9.0'
+ios_platform = new_arch_enabled ? '15.0' : '15.0'
 
 package = JSON.parse(File.read(File.join(__dir__, 'package.json')))
 
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
 
   s.authors      = package['author']
   s.homepage     = package['homepage']
-  s.platforms    = { :ios => "9.0", :osx => "10.13" }
+  s.platforms    = { :ios => "15.0", :osx => "11.0" }
 
   s.source       = { :git => "https://github.com/bootpay/react-native-bootpay-api.git", :tag => "#{s.version}" }
   s.source_files    = "apple/**/*.{h,m,mm,swift}"

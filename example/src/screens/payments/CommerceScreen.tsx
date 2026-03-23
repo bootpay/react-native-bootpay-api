@@ -16,11 +16,11 @@ import {
   CommerceProduct,
   CommerceExtra,
 } from 'react-native-bootpay-api';
+import { ENV, CLIENT_KEY } from '../utils/BootpayConfig';
 
 // 환경별 설정 (iOS SDK와 동일)
-const ENV_CONFIG: Record<string, { client_key: string; plans: Record<string, { monthly_product_id: string; yearly_product_id: string }> }> = {
+const ENV_CONFIG: Record<string, { plans: Record<string, { monthly_product_id: string; yearly_product_id: string }> }> = {
   development: {
-    client_key: 'hxS-Up--5RvT6oU6QJE0JA',
     plans: {
       starter: {
         monthly_product_id: '69268625d8df8fa1837cf661',
@@ -37,7 +37,6 @@ const ENV_CONFIG: Record<string, { client_key: string; plans: Record<string, { m
     },
   },
   production: {
-    client_key: 'sEN72kYZBiyMNytA8nUGxQ',
     plans: {
       starter: {
         monthly_product_id: '6927d893ff30795ff003d374',
@@ -98,7 +97,7 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
   const commerceRef = useRef<BootpayCommerce>(null);
 
   // 환경 및 플랜 상태 (iOS SDK와 동일)
-  const [currentEnv] = useState<'development' | 'production'>('production'); // development API 500 에러로 인해 production 사용
+  const [currentEnv] = useState<'development' | 'production'>(ENV); // BootpayConfig.ts에서 환경 설정
   const [isYearlyBilling, setIsYearlyBilling] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<'starter' | 'pro' | 'enterprise'>('pro');
 
@@ -147,7 +146,7 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
 
     // CommercePayload 생성 (iOS SDK와 동일)
     const payload = new CommercePayload();
-    payload.clientKey = config.client_key;
+    payload.clientKey = CLIENT_KEY;
     payload.name = `CloudSync Pro ${planInfo.name} 플랜`;
     payload.memo = `${billingType} 구독 결제`;
     payload.price = price;
@@ -400,7 +399,7 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
         <View style={styles.infoBox}>
           <Text style={styles.infoTitle}>Commerce 결제 안내</Text>
           <Text style={styles.infoText}>
-            • Client Key: {ENV_CONFIG[currentEnv].client_key}
+            • Client Key: {CLIENT_KEY}
           </Text>
           <Text style={styles.infoText}>
             • 환경: {currentEnv}

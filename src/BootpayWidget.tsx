@@ -25,7 +25,7 @@ import UserInfo from './UserInfo';
 
 const SDK_VERSION = '13.13.4';
 const DEBUG_MODE = false; // 디버그 모드 비활성화
-const WIDGET_URL = 'https://webview.bootpay.co.kr/5.2.2/widget.html';
+const WIDGET_URL = 'https://webview.bootpay.co.kr/5.3.0/widget.html';
 
 type PaymentResult = 'DONE' | 'ERROR' | 'CANCEL' | 'NONE';
 
@@ -397,10 +397,14 @@ export class BootpayWidget extends Component<
     }
 
     this.payload = payload;
-    payload.application_id =
-      Platform.OS === 'ios'
-        ? this.props.ios_application_id
-        : this.props.android_application_id;
+    if (this.props.client_key) {
+      payload.client_key = this.props.client_key;
+    } else if (!payload.client_key) {
+      payload.application_id =
+        Platform.OS === 'ios'
+          ? this.props.ios_application_id
+          : this.props.android_application_id;
+    }
 
     UserInfo.updateInfo();
 
@@ -510,10 +514,14 @@ export class BootpayWidget extends Component<
 
     // payload 업데이트
     if (payload) {
-      payload.application_id =
-        Platform.OS === 'ios'
-          ? this.props.ios_application_id
-          : this.props.android_application_id;
+      if (this.props.client_key) {
+        payload.client_key = this.props.client_key;
+      } else if (!payload.client_key) {
+        payload.application_id =
+          Platform.OS === 'ios'
+            ? this.props.ios_application_id
+            : this.props.android_application_id;
+      }
       if (items) payload.items = items;
       if (user) payload.user = Object.assign(new User(), user);
       if (extra) payload.extra = Object.assign(new Extra(), extra);
@@ -571,6 +579,13 @@ export class BootpayWidget extends Component<
     payload: Payload | WidgetPayload
   ): Record<string, unknown> => {
     const result: Record<string, unknown> = {};
+
+    // 인증 정보
+    if ('client_key' in payload && payload.client_key) {
+      result.client_key = payload.client_key;
+    } else if ('application_id' in payload && payload.application_id) {
+      result.application_id = payload.application_id;
+    }
 
     // 주문 정보
     if ('order_name' in payload && payload.order_name)
@@ -736,8 +751,12 @@ export class BootpayWidget extends Component<
     const payload = this.payload;
     const result: Record<string, unknown> = {};
 
-    // application_id
-    if (payload.application_id) result.application_id = payload.application_id;
+    // client_key or application_id
+    if (payload.client_key) {
+      result.client_key = payload.client_key;
+    } else if (payload.application_id) {
+      result.application_id = payload.application_id;
+    }
 
     // 기본 필드
     if (payload.pg) result.pg = payload.pg;
