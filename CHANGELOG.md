@@ -1,3 +1,7 @@
+## 13.14.2
+* react-native-webview-bootpay 13.14.1 적용
+* React Native New Architecture (Fabric) 웹뷰 흰 화면 수정
+
 ## 13.14.0
 * webview CDN URL을 5.3.0으로 업데이트
 * client_key 인증 방식 추가 (Payload, WidgetPayload, Props 모두 지원)
