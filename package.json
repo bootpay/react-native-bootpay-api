@@ -42,7 +42,7 @@
     "react-native-device-info": "^15.0.1",
     "react-native-gesture-handler": "^2.20.0",
     "react-native-keychain": "^10.0.0",
-    "react-native-webview-bootpay": "13.13.50"
+    "react-native-webview-bootpay": "13.14.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.0",
