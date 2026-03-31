@@ -160,6 +160,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
           handleEvent('done', this.props.onDone, show_success);
           break;
         case 'close':
+        case 'bootpayWidgetRevertScreen':
           this.showProgressBar(false);
           this.closeDismiss();
           break;

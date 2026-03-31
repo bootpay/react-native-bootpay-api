@@ -354,6 +354,7 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
           handleEvent('issued', this.props.onIssued);
           break;
         case 'close':
+        case 'bootpayWidgetRevertScreen':
           this.showProgressBar(false);
           this.closeDismiss();
           break;

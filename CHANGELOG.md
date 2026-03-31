@@ -1,3 +1,7 @@
+## 13.14.3
+* display_success_result/display_error_result 사용 시 결과 화면 "확인" 버튼 클릭해도 모달이 닫히지 않는 버그 수정
+* bootpayWidgetRevertScreen 이벤트 처리 추가 (Bootpay, BootpayCommerce)
+
 ## 13.14.2
 * react-native-webview-bootpay 13.14.1 적용
 * React Native New Architecture (Fabric) 웹뷰 흰 화면 수정
