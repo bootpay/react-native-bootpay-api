@@ -919,7 +919,7 @@ export class BootpayWidget extends Component<
 
         // Payment events
         case 'cancel':
-          this._isProcessingPayment = false; // 결제 처리 완료
+          this._isProcessingPayment = false;
           this.setState({ paymentResult: 'CANCEL' });
           if (this.props.onCancel) {
             this.props.onCancel(data);
@@ -928,20 +928,31 @@ export class BootpayWidget extends Component<
           break;
 
         case 'error':
-          this._isProcessingPayment = false; // 결제 처리 완료
-          this.setState({ paymentResult: 'ERROR' });
-          if (this.props.onError) {
-            this.props.onError(data);
+          {
+            this._isProcessingPayment = false;
+            this.setState({ paymentResult: 'ERROR' });
+            if (this.props.onError) {
+              this.props.onError(data);
+            }
+            const showError = !!this.payload?.extra?.display_error_result;
+            if (!showError) {
+              this.closeDismiss();
+            }
+            // showError이면 결과 화면 표시 후 bootpayWidgetRevertScreen으로 닫힘
           }
-          this.closeDismiss();
           break;
 
         case 'issued':
-          this._isProcessingPayment = false; // 결제 처리 완료
-          if (this.props.onIssued) {
-            this.props.onIssued(data);
+          {
+            this._isProcessingPayment = false;
+            if (this.props.onIssued) {
+              this.props.onIssued(data);
+            }
+            const showSuccess = !!this.payload?.extra?.display_success_result;
+            if (!showSuccess) {
+              this.closeDismiss();
+            }
           }
-          this.closeDismiss();
           break;
 
         case 'confirm':
@@ -951,12 +962,18 @@ export class BootpayWidget extends Component<
           break;
 
         case 'done':
-          this._isProcessingPayment = false; // 결제 처리 완료
-          this.setState({ paymentResult: 'DONE' });
-          if (this.props.onDone) {
-            this.props.onDone(data);
+          {
+            this._isProcessingPayment = false;
+            this.setState({ paymentResult: 'DONE' });
+            if (this.props.onDone) {
+              this.props.onDone(data);
+            }
+            const showSuccess = !!this.payload?.extra?.display_success_result;
+            if (!showSuccess) {
+              this.closeDismiss();
+            }
+            // showSuccess이면 결과 화면 표시 후 bootpayWidgetRevertScreen으로 닫힘
           }
-          this.closeDismiss();
           break;
 
         case 'close':

@@ -1,5 +1,11 @@
+## 13.14.4
+* BootpayWidget에서 display_success_result/display_error_result 지원
+  - done/error/issued 이벤트 시 결과 화면을 풀스크린으로 유지
+  - 사용자가 "확인" 클릭 시 bootpayWidgetRevertScreen으로 위젯 복귀
+  - Flutter SDK와 동일한 동작으로 통일
+
 ## 13.14.3
-* display_success_result/display_error_result 사용 시 결과 화면 "확인" 버튼 클릭해도 모달이 닫히지 않는 버그 수정
+* Bootpay, BootpayCommerce에서 display_success_result 사용 시 결과 화면 "확인" 클릭해도 모달이 닫히지 않는 버그 수정
 * bootpayWidgetRevertScreen 이벤트 처리 추가 (Bootpay, BootpayCommerce)
 
 ## 13.14.2
