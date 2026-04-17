@@ -16,7 +16,7 @@ import {
   CommerceProduct,
   CommerceExtra,
 } from 'react-native-bootpay-api';
-import { ENV, CLIENT_KEY } from '../utils/BootpayConfig';
+import { ENV, CLIENT_KEY } from '../../utils/BootpayConfig';
 
 // 환경별 설정 (iOS SDK와 동일)
 const ENV_CONFIG: Record<string, { plans: Record<string, { monthly_product_id: string; yearly_product_id: string }> }> = {

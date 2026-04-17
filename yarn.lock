@@ -10003,10 +10003,10 @@ react-native-macos@0.76.7:
     ws "^6.2.3"
     yargs "^17.6.2"
 
-react-native-webview-bootpay@13.13.47:
-  version "13.13.47"
-  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.13.47.tgz#0c6053862470e317280b461faffa29d4cbee255d"
-  integrity sha512-PSiLyGZJKjfXziOlzSBCQwdP+ZKmyiIgxS2eqI7BkEK0P7eiHdPLhdLTSfkQB7SKW40IrKXbmb4H7N0SgukJWg==
+react-native-webview-bootpay@13.13.50:
+  version "13.13.50"
+  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.13.50.tgz#f2067f6bdc4bab79d0947cc3bb474deaaab797e6"
+  integrity sha512-Z6oX2Nq8zCzcrX1CxlkcIm2rXu/U4GjdHVnXF9meypTHxOTAbKvvsyQGFJtqxRtcbtTwHQw1/K7orr4Io8lLTw==
   dependencies:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"

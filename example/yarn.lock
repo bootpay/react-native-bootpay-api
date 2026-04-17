@@ -2951,6 +2951,11 @@ doctrine@^3.0.0:
   dependencies:
     esutils "^2.0.2"
 
+dotenv@^16.4.5:
+  version "16.6.1"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.6.1.tgz#773f0e69527a8315c7285d5ee73c4459d20a8020"
+  integrity sha512-uBq4egWHTcTt33a72vpSG0z3HnPuIl6NqYcTrKEg2azoEyl2hpW0zqlxysq2pK9HlDIHyHyakeYaYnSAwd8bow==
+
 dunder-proto@^1.0.0, dunder-proto@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/dunder-proto/-/dunder-proto-1.0.1.tgz#d7ae667e1dc83482f8b70fd0f6eefc50da30f58a"
@@ -5594,14 +5599,31 @@ react-native-aes-crypto@^3.2.1:
   resolved "https://registry.yarnpkg.com/react-native-aes-crypto/-/react-native-aes-crypto-3.2.1.tgz#25d508f38a068b4b302d9dd51ad9ca87afc9dba6"
   integrity sha512-v7KDt1I2UqYwRJRFeJrB8zABQuUsawCyWLK+h5AF2aZqsrsIaR/+DaZrqCetR9QvYRI+oEVsrwBUv9xYXhfCBQ==
 
-"react-native-bootpay-api@link:..":
-  version "0.0.0"
-  uid ""
+react-native-bootpay-api@^13.14.4:
+  version "13.14.4"
+  resolved "https://registry.yarnpkg.com/react-native-bootpay-api/-/react-native-bootpay-api-13.14.4.tgz#89be61b0d3546a082ab57a9568f62a6ccf1d4f66"
+  integrity sha512-IXCfJir06IExTKL/41XBbtwLsBYsdh9l/d/UK+zPl2T/Za788LTwe/tBNYUD9GfawUxn3ABqaYTHvP8U5GP6nQ==
+  dependencies:
+    "@types/react-native-base64" "^0.2.2"
+    escape-string-regexp "^4.0.0"
+    invariant "2.2.4"
+    react-native-aes-crypto "^3.2.1"
+    react-native-device-info "^15.0.1"
+    react-native-gesture-handler "^2.20.0"
+    react-native-keychain "^10.0.0"
+    react-native-webview-bootpay "13.14.1"
 
 react-native-device-info@^15.0.1:
   version "15.0.1"
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-15.0.1.tgz#8a2716861bb8e491e0627f326bcc007c77d2e8f6"
   integrity sha512-U5waZRXtT3l1SgZpZMlIvMKPTkFZPH8W7Ks6GrJhdH723aUIPxjVer7cRSij1mvQdOAAYFJV/9BDzlC8apG89A==
+
+react-native-dotenv@^3.4.11:
+  version "3.4.11"
+  resolved "https://registry.yarnpkg.com/react-native-dotenv/-/react-native-dotenv-3.4.11.tgz#2e6c4eabd55d5f1bf109b3dd9141dadf9c55cdd4"
+  integrity sha512-6vnIE+WHABSeHCaYP6l3O1BOEhWxKH6nHAdV7n/wKn/sciZ64zPPp2NUdEUf1m7g4uuzlLbjgr+6uDt89q2DOg==
+  dependencies:
+    dotenv "^16.4.5"
 
 react-native-gesture-handler@^2.20.0:
   version "2.29.1"
@@ -5617,10 +5639,18 @@ react-native-keychain@^10.0.0:
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-10.0.0.tgz#1de6f54d27b2376deaac4d51883c066f53b7be7b"
   integrity sha512-YzPKSAnSzGEJ12IK6CctNLU79T1W15WDrElRQ+1/FsOazGX9ucFPTQwgYe8Dy8jiSEDJKM4wkVa3g4lD2Z+Pnw==
 
-react-native-webview-bootpay@13.13.47:
-  version "13.13.47"
-  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.13.47.tgz#0c6053862470e317280b461faffa29d4cbee255d"
-  integrity sha512-PSiLyGZJKjfXziOlzSBCQwdP+ZKmyiIgxS2eqI7BkEK0P7eiHdPLhdLTSfkQB7SKW40IrKXbmb4H7N0SgukJWg==
+react-native-webview-bootpay@13.14.1:
+  version "13.14.1"
+  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.14.1.tgz#9392c359457155e1c9107617bb12e1ddc5931882"
+  integrity sha512-9IQfSkYBCjGLAM4bJkR89buAAal1sNvyMllNSBj9/OJPygJncya708LUiFlMxmLhUmywwpYa8Fp/W7srUcw9qA==
+  dependencies:
+    escape-string-regexp "^4.0.0"
+    invariant "2.2.4"
+
+react-native-webview-bootpay@^13.14.3:
+  version "13.14.3"
+  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.14.3.tgz#cd2df75c10674544b6c59bba980fc98f8c070f2f"
+  integrity sha512-ZNKjEF8F37chlj28AW2V2rPnvtv2ydEK+51//9lHzjIN9ej9R4Pzx+OEWPe7SXOFZd4fnTGufUl867XO7bcYBA==
   dependencies:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"
