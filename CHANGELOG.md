@@ -1,3 +1,8 @@
+## 13.14.5
+* react-native-webview-bootpay 13.14.4 적용
+  - Android `<queries>` 보강 (모니모/카카오뱅크 등)
+  - Android/iOS 라우팅 보강 — 삼성 모니모(`monimopay://`, `smcard://`) 스킴 App Store fallback 추가
+
 ## 13.14.4
 * BootpayWidget에서 display_success_result/display_error_result 지원
   - done/error/issued 이벤트 시 결과 화면을 풀스크린으로 유지
