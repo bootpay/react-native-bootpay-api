@@ -48,28 +48,60 @@ const BOOTPAY_ENV: 'development' | 'production' =
 
 const isDev = BOOTPAY_ENV === 'development';
 
+const envValue = (value: unknown): string | undefined => {
+  if (typeof value !== 'string') return undefined;
+  const trimmed = value.trim();
+  if (
+    !trimmed ||
+    trimmed === 'undefined' ||
+    trimmed === 'null' ||
+    (trimmed.startsWith('$(') && trimmed.endsWith(')'))
+  ) {
+    return undefined;
+  }
+  return trimmed;
+};
+
+const resolveKey = (devValue: unknown, prodValue: unknown, devFallback: string, prodFallback: string): string =>
+  envValue(isDev ? devValue : prodValue) || (isDev ? devFallback : prodFallback);
+
 // ===== Export (env 값 → fallback) =====
 export const ENV = BOOTPAY_ENV;
 
-export const WEB_APPLICATION_ID =
-  (isDev ? BOOTPAY_WEB_APPLICATION_ID_DEV : BOOTPAY_WEB_APPLICATION_ID_PROD) ||
-  (isDev ? DEV_DEFAULTS.web : PROD_DEFAULTS.web);
+export const WEB_APPLICATION_ID = resolveKey(
+  BOOTPAY_WEB_APPLICATION_ID_DEV,
+  BOOTPAY_WEB_APPLICATION_ID_PROD,
+  DEV_DEFAULTS.web,
+  PROD_DEFAULTS.web
+);
 
-export const ANDROID_APPLICATION_ID =
-  (isDev ? BOOTPAY_ANDROID_APPLICATION_ID_DEV : BOOTPAY_ANDROID_APPLICATION_ID_PROD) ||
-  (isDev ? DEV_DEFAULTS.android : PROD_DEFAULTS.android);
+export const ANDROID_APPLICATION_ID = resolveKey(
+  BOOTPAY_ANDROID_APPLICATION_ID_DEV,
+  BOOTPAY_ANDROID_APPLICATION_ID_PROD,
+  DEV_DEFAULTS.android,
+  PROD_DEFAULTS.android
+);
 
-export const IOS_APPLICATION_ID =
-  (isDev ? BOOTPAY_IOS_APPLICATION_ID_DEV : BOOTPAY_IOS_APPLICATION_ID_PROD) ||
-  (isDev ? DEV_DEFAULTS.ios : PROD_DEFAULTS.ios);
+export const IOS_APPLICATION_ID = resolveKey(
+  BOOTPAY_IOS_APPLICATION_ID_DEV,
+  BOOTPAY_IOS_APPLICATION_ID_PROD,
+  DEV_DEFAULTS.ios,
+  PROD_DEFAULTS.ios
+);
 
-export const REST_APPLICATION_ID =
-  (isDev ? BOOTPAY_REST_APPLICATION_ID_DEV : BOOTPAY_REST_APPLICATION_ID_PROD) ||
-  (isDev ? DEV_DEFAULTS.rest : PROD_DEFAULTS.rest);
+export const REST_APPLICATION_ID = resolveKey(
+  BOOTPAY_REST_APPLICATION_ID_DEV,
+  BOOTPAY_REST_APPLICATION_ID_PROD,
+  DEV_DEFAULTS.rest,
+  PROD_DEFAULTS.rest
+);
 
-export const CLIENT_KEY =
-  (isDev ? BOOTPAY_CLIENT_KEY_DEV : BOOTPAY_CLIENT_KEY_PROD) ||
-  (isDev ? DEV_DEFAULTS.client_key : PROD_DEFAULTS.client_key);
+export const CLIENT_KEY = resolveKey(
+  BOOTPAY_CLIENT_KEY_DEV,
+  BOOTPAY_CLIENT_KEY_PROD,
+  DEV_DEFAULTS.client_key,
+  PROD_DEFAULTS.client_key
+);
 
 // 공통 설정
 export const APP_SCHEME = 'bootpayReactNativeExample';
@@ -78,6 +110,9 @@ export const METHOD_LIST = ['카드', '계좌이체', '가상계좌', '휴대폰
 export const AUTH_PG_LIST = ['다날', 'KCP'];
 export const SUBSCRIPTION_PG_LIST = ['나이스페이', '토스', 'KG이니시스'];
 
-export const SERVER_KEY =
-  (isDev ? BOOTPAY_SERVER_KEY_DEV : BOOTPAY_SERVER_KEY_PROD) ||
-  (isDev ? DEV_DEFAULTS.server_key : PROD_DEFAULTS.server_key);
+export const SERVER_KEY = resolveKey(
+  BOOTPAY_SERVER_KEY_DEV,
+  BOOTPAY_SERVER_KEY_PROD,
+  DEV_DEFAULTS.server_key,
+  PROD_DEFAULTS.server_key
+);
