@@ -5599,10 +5599,8 @@ react-native-aes-crypto@^3.2.1:
   resolved "https://registry.yarnpkg.com/react-native-aes-crypto/-/react-native-aes-crypto-3.2.1.tgz#25d508f38a068b4b302d9dd51ad9ca87afc9dba6"
   integrity sha512-v7KDt1I2UqYwRJRFeJrB8zABQuUsawCyWLK+h5AF2aZqsrsIaR/+DaZrqCetR9QvYRI+oEVsrwBUv9xYXhfCBQ==
 
-react-native-bootpay-api@^13.14.4:
-  version "13.14.4"
-  resolved "https://registry.yarnpkg.com/react-native-bootpay-api/-/react-native-bootpay-api-13.14.4.tgz#89be61b0d3546a082ab57a9568f62a6ccf1d4f66"
-  integrity sha512-IXCfJir06IExTKL/41XBbtwLsBYsdh9l/d/UK+zPl2T/Za788LTwe/tBNYUD9GfawUxn3ABqaYTHvP8U5GP6nQ==
+"react-native-bootpay-api@file:..":
+  version "13.14.5"
   dependencies:
     "@types/react-native-base64" "^0.2.2"
     escape-string-regexp "^4.0.0"
@@ -5611,7 +5609,7 @@ react-native-bootpay-api@^13.14.4:
     react-native-device-info "^15.0.1"
     react-native-gesture-handler "^2.20.0"
     react-native-keychain "^10.0.0"
-    react-native-webview-bootpay "13.14.1"
+    react-native-webview-bootpay "13.14.4"
 
 react-native-device-info@^15.0.1:
   version "15.0.1"
@@ -5639,10 +5637,10 @@ react-native-keychain@^10.0.0:
   resolved "https://registry.yarnpkg.com/react-native-keychain/-/react-native-keychain-10.0.0.tgz#1de6f54d27b2376deaac4d51883c066f53b7be7b"
   integrity sha512-YzPKSAnSzGEJ12IK6CctNLU79T1W15WDrElRQ+1/FsOazGX9ucFPTQwgYe8Dy8jiSEDJKM4wkVa3g4lD2Z+Pnw==
 
-react-native-webview-bootpay@13.14.1:
-  version "13.14.1"
-  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.14.1.tgz#9392c359457155e1c9107617bb12e1ddc5931882"
-  integrity sha512-9IQfSkYBCjGLAM4bJkR89buAAal1sNvyMllNSBj9/OJPygJncya708LUiFlMxmLhUmywwpYa8Fp/W7srUcw9qA==
+react-native-webview-bootpay@13.14.4:
+  version "13.14.4"
+  resolved "https://registry.yarnpkg.com/react-native-webview-bootpay/-/react-native-webview-bootpay-13.14.4.tgz#07f52e6a91644e60375fcd53e384c085b8457cf1"
+  integrity sha512-kRuUeZdw37vs4cidHVZt8g77OxCCetyGxG7Y8LTk6pfHf7FZwQFCcNS21zrYtcL62Uouz8TCxJ6Eyf5mxUjWxg==
   dependencies:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"

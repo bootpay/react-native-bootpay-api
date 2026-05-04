@@ -5,6 +5,7 @@
   "main": "index.tsx",
   "main-internal": "src/index.tsx",
   "react-native": "src/index.tsx",
+  "types": "src/index.tsx",
   "author": "bootpay <bootpay.co.kr@gmail.com>",
   "license": "MIT",
   "homepage": "https://www.bootpay.co.kr",

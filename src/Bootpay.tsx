@@ -236,7 +236,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
   requestPayment = async (
     payload: Payload,
-    items: [Item],
+    items: Item[],
     user: User,
     extra: Extra
   ) => {
@@ -245,7 +245,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
   requestSubscription = async (
     payload: Payload,
-    items: [Item],
+    items: Item[],
     user: User,
     extra: Extra
   ) => {
@@ -254,7 +254,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
   requestAuthentication = async (
     payload: Payload,
-    items: [Item],
+    items: Item[],
     user: User,
     extra: Extra
   ) => {
@@ -263,7 +263,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
   bootpayRequest = async (
     payload: Payload,
-    items: [Item],
+    items: Item[],
     user: User,
     extra: Extra,
     requestMethod: string

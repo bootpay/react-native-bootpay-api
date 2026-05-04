@@ -235,7 +235,7 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
   }, [onBack]);
 
   // iOS SDK와 동일한 결과 표시
-  const getResultIcon = () => {
+  const getResultIcon = (): { icon: string; color: string } => {
     switch (resultType) {
       case 'success':
         return { icon: '✓', color: '#4CAF50' }; // systemGreen
@@ -453,7 +453,7 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
               {paymentResult && (
                 <View style={styles.resultDetailsCard}>
                   {/* 주문번호 (order_number) - iOS SDK와 동일 */}
-                  {(paymentResult as Record<string, unknown>).order_number && (
+                  {Boolean((paymentResult as Record<string, unknown>).order_number) && (
                     <View style={styles.resultRow}>
                       <Text style={styles.resultLabel}>주문번호</Text>
                       <Text style={styles.resultValue}>
@@ -473,15 +473,17 @@ export function CommerceScreen({ onBack }: CommerceScreenProps) {
                   )}
 
                   {/* 플랜 정보 (metadata에서 추출) - iOS SDK와 동일 */}
-                  {getMetadataValue('plan_key') && (
-                    <View style={styles.resultRow}>
-                      <Text style={styles.resultLabel}>플랜</Text>
-                      <Text style={styles.resultValue}>
-                        {getMetadataValue('plan_key')?.charAt(0).toUpperCase() +
-                          getMetadataValue('plan_key')?.slice(1)}
-                      </Text>
-                    </View>
-                  )}
+                  {(() => {
+                    const planKey = getMetadataValue('plan_key');
+                    return planKey ? (
+                      <View style={styles.resultRow}>
+                        <Text style={styles.resultLabel}>플랜</Text>
+                        <Text style={styles.resultValue}>
+                          {planKey.charAt(0).toUpperCase() + planKey.slice(1)}
+                        </Text>
+                      </View>
+                    ) : null;
+                  })()}
 
                   {/* 결제 주기 (metadata에서 추출) - iOS SDK와 동일 */}
                   {getMetadataValue('billing_type') && (

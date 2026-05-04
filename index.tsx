@@ -1,6 +1,60 @@
-// import { Bootpay } from './src/Bootpay';
-// import { Payload, Extra, Item, User } from './src/BootpayTypes';
 import { Bootpay } from './lib/Bootpay';
-import { Payload, Extra, Item, User } from './lib/BootpayTypes';
-export { Bootpay, Payload, Extra, Item, User };
+import { BootpayWidget } from './lib/BootpayWidget';
+import { BootpayCommerce } from './lib/BootpayCommerce';
+import {
+  Payload,
+  Extra,
+  Item,
+  User,
+  BootpayEventData,
+  BootpayTypesProps,
+} from './lib/BootpayTypes';
+import {
+  WidgetData,
+  WidgetTerm,
+  WidgetExtra,
+  WidgetPayload,
+  WidgetPayloadExtra,
+  BootpayWidgetProps,
+  WidgetReadyCallback,
+  WidgetResizeCallback,
+  WidgetChangePaymentCallback,
+  WidgetChangeTermsCallback,
+} from './lib/WidgetTypes';
+import {
+  CommercePayload,
+  CommerceUser,
+  CommerceProduct,
+  CommerceExtra,
+  CommerceEventData,
+  BootpayCommerceProps,
+} from './lib/CommerceTypes';
+
+export {
+  Bootpay,
+  Payload,
+  Extra,
+  Item,
+  User,
+  BootpayEventData,
+  BootpayTypesProps,
+  BootpayWidget,
+  WidgetData,
+  WidgetTerm,
+  WidgetExtra,
+  WidgetPayload,
+  WidgetPayloadExtra,
+  BootpayWidgetProps,
+  WidgetReadyCallback,
+  WidgetResizeCallback,
+  WidgetChangePaymentCallback,
+  WidgetChangeTermsCallback,
+  BootpayCommerce,
+  CommercePayload,
+  CommerceUser,
+  CommerceProduct,
+  CommerceExtra,
+  CommerceEventData,
+  BootpayCommerceProps,
+};
 export default Bootpay;

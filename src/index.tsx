@@ -7,26 +7,33 @@ import {
   Extra,
   Item,
   User,
-  BootpayEventData,
-  BootpayTypesProps,
 } from './BootpayTypes';
 import {
-  WidgetData,
-  WidgetTerm,
-  WidgetExtra,
   WidgetPayload,
   WidgetPayloadExtra,
-  BootpayWidgetProps,
-  WidgetReadyCallback,
-  WidgetResizeCallback,
-  WidgetChangePaymentCallback,
-  WidgetChangeTermsCallback,
 } from './WidgetTypes';
 import {
   CommercePayload,
   CommerceUser,
   CommerceProduct,
   CommerceExtra,
+} from './CommerceTypes';
+
+export type {
+  BootpayEventData,
+  BootpayTypesProps,
+} from './BootpayTypes';
+export type {
+  WidgetData,
+  WidgetTerm,
+  WidgetExtra,
+  BootpayWidgetProps,
+  WidgetReadyCallback,
+  WidgetResizeCallback,
+  WidgetChangePaymentCallback,
+  WidgetChangeTermsCallback,
+} from './WidgetTypes';
+export type {
   CommerceEventData,
   BootpayCommerceProps,
 } from './CommerceTypes';
@@ -109,26 +116,14 @@ export {
   Extra,
   Item,
   User,
-  BootpayEventData,
-  BootpayTypesProps,
   // Widget 컴포넌트
   BootpayWidget,
-  WidgetData,
-  WidgetTerm,
-  WidgetExtra,
   WidgetPayload,
   WidgetPayloadExtra,
-  BootpayWidgetProps,
-  WidgetReadyCallback,
-  WidgetResizeCallback,
-  WidgetChangePaymentCallback,
-  WidgetChangeTermsCallback,
   // Commerce 컴포넌트
   BootpayCommerce,
   CommercePayload,
   CommerceUser,
   CommerceProduct,
   CommerceExtra,
-  CommerceEventData,
-  BootpayCommerceProps,
 };
