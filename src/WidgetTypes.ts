@@ -71,6 +71,8 @@ export class WidgetPayload {
 
   // 기본 Payload 필드
   application_id?: string;
+  ios_application_id?: string; // legacy platform key 호환용
+  android_application_id?: string; // legacy platform key 호환용
   client_key?: string;
   pg?: string;
   method?: string;

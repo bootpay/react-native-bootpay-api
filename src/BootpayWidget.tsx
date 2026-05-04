@@ -1043,7 +1043,7 @@ export class BootpayWidget extends Component<
   };
 
   render() {
-    const { isFullScreen, screenWidth, screenHeight } = this.state;
+    const { isFullScreen, screenWidth } = this.state;
     const { style, widgetTop } = this.props;
 
     // Flutter와 동일: 하나의 WebView만 렌더링

@@ -10,8 +10,7 @@ import {
 } from 'react-native';
 import { Bootpay } from 'react-native-bootpay-api';
 import {
-  ANDROID_APPLICATION_ID,
-  IOS_APPLICATION_ID,
+  CLIENT_KEY,
   APP_SCHEME,
   PG_LIST,
   METHOD_LIST,
@@ -201,8 +200,7 @@ export function DefaultPaymentScreen({ onBack }: DefaultPaymentScreenProps) {
 
       <Bootpay
         ref={bootpay}
-        ios_application_id={IOS_APPLICATION_ID}
-        android_application_id={ANDROID_APPLICATION_ID}
+        client_key={CLIENT_KEY}
         onCancel={onCancel}
         onError={onError}
         onIssued={onIssued}

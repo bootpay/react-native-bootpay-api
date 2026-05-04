@@ -19,6 +19,8 @@ import {
   BOOTPAY_REST_APPLICATION_ID_PROD,
   BOOTPAY_CLIENT_KEY_DEV,
   BOOTPAY_CLIENT_KEY_PROD,
+  BOOTPAY_SERVER_KEY_DEV,
+  BOOTPAY_SERVER_KEY_PROD,
 } from '@env';
 
 // ===== Production 기본값 (fallback) =====
@@ -28,6 +30,7 @@ const PROD_DEFAULTS = {
   ios: '5b8f6a4d396fa665fdc2b5e9',
   rest: '5b8f6a4d396fa665fdc2b5ea',
   client_key: 'sEN72kYZBiyMNytA8nUGxQ',
+  server_key: 'rnZLJamENRgfwTccwmI_Uu9cxsPpAV9X2W-Htg73yfU=',
 };
 
 // ===== Development 기본값 =====
@@ -37,6 +40,7 @@ const DEV_DEFAULTS = {
   ios: '5b9f51264457636ab9a07cdd',
   rest: '59b731f084382614ebf72215',
   client_key: 'hxS-Up--5RvT6oU6QJE0JA',
+  server_key: 'r5zxvDcQJiAP2PBQ0aJjSHQtblNmYFt6uFoEMhti_mg=',
 };
 
 const BOOTPAY_ENV: 'development' | 'production' =
@@ -73,3 +77,7 @@ export const PG_LIST = ['나이스페이', '토스', 'KG이니시스', '다날']
 export const METHOD_LIST = ['카드', '계좌이체', '가상계좌', '휴대폰'];
 export const AUTH_PG_LIST = ['다날', 'KCP'];
 export const SUBSCRIPTION_PG_LIST = ['나이스페이', '토스', 'KG이니시스'];
+
+export const SERVER_KEY =
+  (isDev ? BOOTPAY_SERVER_KEY_DEV : BOOTPAY_SERVER_KEY_PROD) ||
+  (isDev ? DEV_DEFAULTS.server_key : PROD_DEFAULTS.server_key);

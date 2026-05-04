@@ -8,9 +8,12 @@ import {
 } from 'react-native';
 import WebView, {
   WebViewMessageEvent,
-  WebViewNavigation,
-  ShouldStartLoadRequest,
 } from 'react-native-webview-bootpay';
+import type {
+  ShouldStartLoadRequest,
+  WebViewErrorEvent,
+  WebViewNavigationEvent,
+} from 'react-native-webview-bootpay/lib/WebViewTypes';
 import {
   BootpayCommerceProps,
   CommerceEventData,
@@ -135,7 +138,7 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
   };
 
   // iOS SDK와 동일하게 페이지 로드 완료 후 JavaScript 주입
-  onLoadEnd = (event: { nativeEvent: WebViewNavigation }) => {
+  onLoadEnd = (event: WebViewNavigationEvent | WebViewErrorEvent) => {
     const url = event.nativeEvent.url;
     if (DEBUG_MODE) {
       console.log('[BootpayCommerce] onLoadEnd URL:', url);

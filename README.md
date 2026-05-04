@@ -273,10 +273,7 @@ export default function App() {
 
       <Bootpay 
       ref={bootpay}
-      ios_application_id={'5b8f6a4d396fa665fdc2b5e9'}
-      android_application_id={'5b8f6a4d396fa665fdc2b5e8'} 
-      // ios_application_id={'5b9f51264457636ab9a07cdd'}
-      // android_application_id={'5b9f51264457636ab9a07cdc'} 
+      client_key={'YOUR_CLIENT_KEY'}
       onCancel={onCancel}
       onError={onError}
       onIssued={onIssued}

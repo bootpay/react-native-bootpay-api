@@ -1,3 +1,7 @@
+## Unreleased
+- example: react-native-dotenv 기반 client_key 예제로 정리하고 production fallback 유지
+- legacy application_id props는 호환용으로 유지
+
 ## 13.14.5
 * react-native-webview-bootpay 13.14.4 적용
   - Android `<queries>` 보강 (모니모/카카오뱅크 등)

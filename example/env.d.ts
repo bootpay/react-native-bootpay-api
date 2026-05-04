@@ -10,4 +10,6 @@ declare module '@env' {
   export const BOOTPAY_REST_APPLICATION_ID_PROD: string | undefined;
   export const BOOTPAY_CLIENT_KEY_DEV: string | undefined;
   export const BOOTPAY_CLIENT_KEY_PROD: string | undefined;
+  export const BOOTPAY_SERVER_KEY_DEV: string | undefined;
+  export const BOOTPAY_SERVER_KEY_PROD: string | undefined;
 }
