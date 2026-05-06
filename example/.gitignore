@@ -1,6 +1,5 @@
-# Environment
-.env
-!.env.example
+# Environment — `.env` 는 committed source. `.env.local` 은 로컬 override.
+.env.local
 
 # OSX
 #
