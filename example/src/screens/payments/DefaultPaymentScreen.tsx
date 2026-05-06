@@ -11,10 +11,14 @@ import {
 import { Bootpay } from 'react-native-bootpay-api';
 import {
   CLIENT_KEY,
+  ANDROID_APPLICATION_ID,
+  IOS_APPLICATION_ID,
   APP_SCHEME,
   PG_LIST,
   METHOD_LIST,
 } from '../../utils/BootpayConfig';
+
+type PaymentAuthMode = 'client_key' | 'legacy_application_id' | 'missing_key';
 
 interface PaymentResultData {
   receipt_id?: string;
@@ -40,6 +44,7 @@ export function DefaultPaymentScreen({ onBack }: DefaultPaymentScreenProps) {
   const [quantity, setQuantity] = useState(1);
   const [selectedPg, setSelectedPg] = useState('나이스페이');
   const [selectedMethod, setSelectedMethod] = useState('카드');
+  const [authMode, setAuthMode] = useState<PaymentAuthMode>('client_key');
   const [showResult, setShowResult] = useState(false);
   const [paymentResult, setPaymentResult] = useState<PaymentResultData | null>(null);
 
@@ -189,6 +194,26 @@ export function DefaultPaymentScreen({ onBack }: DefaultPaymentScreenProps) {
             </TouchableOpacity>
           ))}
         </View>
+
+        {/* 인증 방식 검증 */}
+        <Text style={styles.sectionLabel}>인증 방식 검증</Text>
+        <View style={styles.chipContainer}>
+          {[
+            ['client_key', 'client_key'],
+            ['legacy_application_id', 'legacy application_id'],
+            ['missing_key', '키 없음'],
+          ].map(([mode, label]) => (
+            <TouchableOpacity
+              key={mode}
+              style={[styles.chip, authMode === mode && styles.chipSelected]}
+              onPress={() => setAuthMode(mode as PaymentAuthMode)}
+            >
+              <Text style={[styles.chipText, authMode === mode && styles.chipTextSelected]}>
+                {label}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       </ScrollView>
 
       {/* 결제 버튼 */}
@@ -200,7 +225,9 @@ export function DefaultPaymentScreen({ onBack }: DefaultPaymentScreenProps) {
 
       <Bootpay
         ref={bootpay}
-        client_key={CLIENT_KEY}
+        client_key={authMode === 'client_key' ? CLIENT_KEY : undefined}
+        android_application_id={authMode === 'legacy_application_id' ? ANDROID_APPLICATION_ID : undefined}
+        ios_application_id={authMode === 'legacy_application_id' ? IOS_APPLICATION_ID : undefined}
         onCancel={onCancel}
         onError={onError}
         onIssued={onIssued}
