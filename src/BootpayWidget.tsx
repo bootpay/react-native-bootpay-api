@@ -24,7 +24,7 @@ import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
 import { buildEnvironmentScript } from './environment';
 
-const SDK_VERSION = '13.13.4';
+const SDK_VERSION = '13.14.5';
 const DEBUG_MODE = false; // 디버그 모드 비활성화
 const WIDGET_URL = 'https://webview.bootpay.co.kr/5.3.0/widget.html';
 
