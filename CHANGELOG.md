@@ -1,6 +1,14 @@
-## Unreleased
-- example: react-native-dotenv 기반 client_key 예제로 정리하고 production fallback 유지
-- legacy application_id props는 호환용으로 유지
+## 13.15.0
+* 통합 환경 모드 API 추가
+  - `setEnvironmentMode('development' | 'stage' | 'production')` 모듈 레벨 export
+  - Bootpay / BootpayWidget / BootpayCommerce 가 동일 truth-table 로 webview 에 주입
+  - 기본값은 항상 `production`; legacy DEBUG fallback 유지
+  - `BootpayEnvironmentMode` 타입 export
+* example: react-native-dotenv 기반 client_key 예제로 정리하고 production fallback 유지
+  - legacy `application_id` props 는 호환용으로 유지
+  - `BOOTPAY_SERVER_KEY` 흔적 제거 (client 에 secret 노출 금지)
+* iOS 예제 Info.plist 의 URL scheme 을 `bootpayReactNativeExample` 로 정렬
+  - `BootpayConfig.APP_SCHEME` 와 일치시켜 결제 후 외부 앱 → RN 앱 복귀 정상화
 
 ## 13.14.5
 * react-native-webview-bootpay 13.14.4 적용

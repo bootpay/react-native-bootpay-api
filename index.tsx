@@ -1,6 +1,8 @@
 import { Bootpay } from './lib/Bootpay';
 import { BootpayWidget } from './lib/BootpayWidget';
 import { BootpayCommerce } from './lib/BootpayCommerce';
+import { setEnvironmentMode } from './lib/environment';
+import type { BootpayEnvironmentMode } from './lib/environment';
 import {
   Payload,
   Extra,
@@ -56,5 +58,7 @@ export {
   CommerceExtra,
   CommerceEventData,
   BootpayCommerceProps,
+  setEnvironmentMode,
 };
+export type { BootpayEnvironmentMode };
 export default Bootpay;
