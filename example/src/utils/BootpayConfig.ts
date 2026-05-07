@@ -78,4 +78,4 @@ export const METHOD_LIST = ['카드', '계좌이체', '가상계좌', '휴대폰
 export const AUTH_PG_LIST = ['다날', 'KCP'];
 export const SUBSCRIPTION_PG_LIST = ['나이스페이', '토스', 'KG이니시스'];
 
-// 주의: server_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용
+// 주의: secret_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용
