@@ -22,6 +22,7 @@ import { BootpayWidgetProps, WidgetPayload, WidgetData } from './WidgetTypes';
 import { Payload, Item, User, Extra } from './BootpayTypes';
 import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
+import { buildEnvironmentScript } from './environment';
 
 const SDK_VERSION = '13.13.4';
 const DEBUG_MODE = false; // 디버그 모드 비활성화
@@ -726,7 +727,7 @@ export class BootpayWidget extends Component<
   };
 
   getEnvironmentMode = () => {
-    return DEBUG_MODE ? "BootpayWidget.setEnvironmentMode('development');" : '';
+    return buildEnvironmentScript('BootpayWidget', DEBUG_MODE);
   };
 
   getBootpayPlatform = () => {

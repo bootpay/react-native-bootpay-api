@@ -2,6 +2,7 @@ import { NativeModules, Platform } from 'react-native';
 import { Bootpay } from './Bootpay';
 import { BootpayWidget } from './BootpayWidget';
 import { BootpayCommerce } from './BootpayCommerce';
+import { setEnvironmentMode } from './environment';
 import {
   Payload,
   Extra,
@@ -126,4 +127,7 @@ export {
   CommerceUser,
   CommerceProduct,
   CommerceExtra,
+  // 환경 모드 (development | stage | production)
+  setEnvironmentMode,
 };
+export type { BootpayEnvironmentMode } from './environment';

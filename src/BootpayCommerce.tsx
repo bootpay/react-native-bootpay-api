@@ -20,6 +20,7 @@ import {
   CommercePayload,
 } from './CommerceTypes';
 import { debounce } from 'lodash';
+import { buildEnvironmentScript } from './environment';
 
 const COMMERCE_URL = 'https://webview.bootpay.co.kr/commerce/1.0.5/index.html';
 const DEBUG_MODE = false;
@@ -64,8 +65,7 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
   };
 
   getEnvironmentMode = () => {
-    // iOS SDK와 동일: development 모드에서만 setEnvironmentMode 호출
-    return DEBUG_MODE ? "BootpayCommerce.setEnvironmentMode('development');" : '';
+    return buildEnvironmentScript('BootpayCommerce', DEBUG_MODE);
   };
 
   generateCommerceScript = (payload: CommercePayload) => {

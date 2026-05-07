@@ -18,6 +18,7 @@ import {
 } from './BootpayTypes';
 import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
+import { buildEnvironmentScript } from './environment';
 
 const SDK_VERSION = '13.13.4';
 const DEBUG_MODE = false;
@@ -193,7 +194,7 @@ export class Bootpay extends Component<BootpayTypesProps> {
   };
 
   getEnvironmentMode = () => {
-    return DEBUG_MODE ? "Bootpay.setEnvironmentMode('development');" : '';
+    return buildEnvironmentScript('Bootpay', DEBUG_MODE);
   };
 
   getBootpayPlatform = () => {

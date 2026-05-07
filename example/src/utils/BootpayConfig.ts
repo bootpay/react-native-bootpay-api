@@ -17,8 +17,6 @@ import {
   BOOTPAY_REST_APPLICATION_ID_PROD,
   BOOTPAY_CLIENT_KEY_DEV,
   BOOTPAY_CLIENT_KEY_PROD,
-  BOOTPAY_SERVER_KEY_DEV,
-  BOOTPAY_SERVER_KEY_PROD,
 } from '@env';
 
 const BOOTPAY_ENV: 'development' | 'production' =
@@ -80,7 +78,4 @@ export const METHOD_LIST = ['카드', '계좌이체', '가상계좌', '휴대폰
 export const AUTH_PG_LIST = ['다날', 'KCP'];
 export const SUBSCRIPTION_PG_LIST = ['나이스페이', '토스', 'KG이니시스'];
 
-export const SERVER_KEY = resolveKey(
-  BOOTPAY_SERVER_KEY_DEV,
-  BOOTPAY_SERVER_KEY_PROD,
-);
+// 주의: server_key (secret) 는 클라이언트에 절대 포함하지 말 것 — 서버 SDK 에서만 사용
