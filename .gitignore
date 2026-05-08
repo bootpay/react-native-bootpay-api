@@ -60,3 +60,6 @@ lib/
 msbuild.binlog
 example/msbuild.binlog
 example-old/
+
+# omj automation runtime
+.omj/
