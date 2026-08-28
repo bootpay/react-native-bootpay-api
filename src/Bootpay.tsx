@@ -106,6 +106,35 @@ export class Bootpay extends Component<BootpayTypesProps> {
 
   closeBridge = () => buildCloseBridgeScript();
 
+  // union(통합결제) 페이지는 use_bootpay_inapp_sdk=true 상태에서 이벤트를 JS window.parent
+  // 대신 네이티브 브릿지로 바로 보낸다. 그래서 SDK 호스트 페이지가 하던 화면 이동을
+  // RN 이 대신해야 한다. 이동 지시에 붙어오는 parameters 는 JS SDK 와 같은 규칙으로 합친다.
+  buildRedirectUrl = (payload: Record<string, unknown>): string | undefined => {
+    const url = payload.url;
+    if (typeof url !== 'string' || url.length === 0) return undefined;
+
+    const parameters = payload.parameters;
+    if (parameters === undefined || parameters === null) return url;
+
+    const query =
+      typeof parameters === 'string'
+        ? parameters
+        : new URLSearchParams(
+            parameters as Record<string, string>
+          ).toString();
+    if (query.length === 0) return url;
+
+    return /\?/.test(url) ? `${url}&${query}` : `${url}?${query}`;
+  };
+
+  moveWebView = (url: string, replace: boolean) => {
+    this.callJavaScript(
+      replace
+        ? `location.replace(${JSON.stringify(url)});`
+        : `location.href = ${JSON.stringify(url)};`
+    );
+  };
+
   onMessage = async (event: WebViewMessageEvent) => {
     if (!event) return;
 
@@ -170,6 +199,29 @@ export class Bootpay extends Component<BootpayTypesProps> {
         case 'bootpayWidgetRevertScreen':
           this.showProgressBar(false);
           this.closeDismiss();
+          break;
+        // "webview 전체를 이 URL 로 이동시켜라" 지시.
+        // JS SDK 호스트 페이지의 location.href / location.replace 를 RN 이 대신한다.
+        case 'redirect':
+        case 'moveRedirectUrl': {
+          const source = (
+            data.data && typeof data.data === 'object' ? data.data : data
+          ) as Record<string, unknown>;
+          const url = this.buildRedirectUrl(source);
+          if (url) this.moveWebView(url, data.event === 'moveRedirectUrl');
+          break;
+        }
+        // UI 제어 이벤트는 SDK 호스트 페이지의 progress / iframe 크기 조정 용도라
+        // RN webview 에는 대응되는 DOM 이 없다. 조용히 무시한다.
+        case 'showPayment':
+        case 'hidePayment':
+        case 'showProgress':
+        case 'hideProgress':
+        case 'resize':
+        case 'iFrameStyle':
+        case 'windowStyle':
+        case 'polling':
+        case 'setConfirmParameters':
           break;
         default:
           console.warn(`Unknown event type: ${data.event}`);

@@ -129,3 +129,85 @@ describe('closeBridge 주입 스크립트', () => {
     expect(posted).toEqual([]);
   });
 });
+
+describe('union(통합결제) 이벤트', () => {
+  const withInjector = () => {
+    const injected: string[] = [];
+    const instance = buildInstance();
+    instance.callJavaScript = (script: string) => {
+      injected.push(script);
+    };
+    return { instance, injected };
+  };
+
+  it('redirect 는 location.href 로 webview 를 이동시킨다', async () => {
+    const { instance, injected } = withInjector();
+
+    await send(
+      instance,
+      JSON.stringify({
+        bootpay_event: true,
+        event: 'redirect',
+        data: { url: 'https://gw.example.com/pay' },
+      })
+    );
+
+    expect(injected).toEqual([
+      'location.href = "https://gw.example.com/pay";',
+    ]);
+  });
+
+  it('moveRedirectUrl 은 parameters 를 붙여 location.replace 한다', async () => {
+    const { instance, injected } = withInjector();
+
+    await send(
+      instance,
+      JSON.stringify({
+        bootpay_event: true,
+        event: 'moveRedirectUrl',
+        data: {
+          url: 'https://gw.example.com/done?a=1',
+          parameters: { receipt_id: 'r1', status: '1' },
+        },
+      })
+    );
+
+    expect(injected).toEqual([
+      'location.replace("https://gw.example.com/done?a=1&receipt_id=r1&status=1");',
+    ]);
+  });
+
+  it('data 래핑 없이 최상위에 url 이 와도 처리한다', async () => {
+    const { instance, injected } = withInjector();
+
+    await send(
+      instance,
+      JSON.stringify({ event: 'redirect', url: 'https://gw.example.com/x' })
+    );
+
+    expect(injected).toEqual(['location.href = "https://gw.example.com/x";']);
+  });
+
+  it('UI 제어 이벤트는 경고 없이 무시한다', async () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const { instance, injected } = withInjector();
+
+    for (const event of [
+      'showPayment',
+      'hidePayment',
+      'showProgress',
+      'hideProgress',
+      'resize',
+      'iFrameStyle',
+      'windowStyle',
+      'polling',
+      'setConfirmParameters',
+    ]) {
+      await send(instance, JSON.stringify({ event }));
+    }
+
+    expect(warn).not.toHaveBeenCalled();
+    expect(injected).toEqual([]);
+    warn.mockRestore();
+  });
+});
