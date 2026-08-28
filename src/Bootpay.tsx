@@ -21,7 +21,7 @@ import UserInfo from './UserInfo';
 import { buildEnvironmentScript } from './environment';
 import { buildCloseBridgeScript, parseWebViewMessage } from './closeBridge';
 
-const SDK_VERSION = '13.15.0';
+const SDK_VERSION = '13.15.1';
 const DEBUG_MODE = false;
 
 export class Bootpay extends Component<BootpayTypesProps> {

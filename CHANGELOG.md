@@ -1,3 +1,19 @@
+## 13.15.1
+* fix: 결제창 내부 닫기(X) 버튼이 앱으로 전달되지 않던 문제
+  - 주입 스크립트가 `postMessage('close')` 로 JSON 이 아닌 raw 문자열을 보내는데
+    `onMessage` 가 `JSON.parse` 를 먼저 태워 SyntaxError 로 삼켜지고 있었다
+  - close 를 JSON 으로 송신하고, 수신부는 raw 문자열도 함께 처리한다 (구버전 webview 호환)
+  - 결제 페이지가 `window.close()` 로 창을 닫으려 할 때도 `onClose` 로 통지한다
+    (iOS 는 `webViewDidClose` 로 네이티브에만 알려 결제창에 갇히는 문제가 있었다)
+  - close 브릿지를 SDK 부트스트랩과 분리해 Bootpay 전역이 없는 PG 결제 페이지에서도 동작
+* fix: union(통합결제) 페이지 이벤트 미처리
+  - `use_bootpay_inapp_sdk=true` 상태에서 네이티브 브릿지로 직접 오는 이벤트를 처리한다
+  - `redirect` / `moveRedirectUrl` → webview 이동 (parameters 는 JS SDK 규칙으로 합침)
+  - `showPayment` / `hidePayment` / `showProgress` / `hideProgress` / `resize` /
+    `iFrameStyle` / `windowStyle` / `polling` / `setConfirmParameters` → 무시
+* fix(example): metro 설정에 `disableHierarchicalLookup` 추가
+  - SDK 루트에서 `yarn install` 시 React 가 두 벌 로드되어 앱이 죽던 문제
+
 ## 13.15.0
 * 통합 환경 모드 API 추가
   - `setEnvironmentMode('development' | 'stage' | 'production')` 모듈 레벨 export
