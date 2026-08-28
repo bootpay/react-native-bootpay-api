@@ -19,10 +19,14 @@ CDN URL 변경 시 추가:
 
 ## 배포 절차 (npm + 2FA bypass)
 
-`~/.npmrc` 의 토큰은 2FA 를 요구해서 비대화형 publish 가 막힌다. `react-native-webview-bootpay/.env` 의 `NPM_TOKEN` (Automation 토큰, bypass-2fa 활성화) 을 CLI 플래그로 주입해야 한다 — `set -a && . ./.env` 방식은 `~/.npmrc` 가 우선이라 먹히지 않는다.
+`~/.npmrc` 의 토큰은 2FA 를 요구해서 비대화형 publish 가 막힌다. Automation 토큰을 CLI 플래그로 주입해야 한다 — `set -a && . ./.env` 방식은 `~/.npmrc` 가 우선이라 먹히지 않는다.
+
+⚠️ **`react-native-webview-bootpay/.env` 의 `NPM_TOKEN` 은 만료됐다** (2026-08-28 실측 E401).
+`~/.npmrc` 도 E401. 살아있는 토큰은 아래 하나뿐이다 (계정 `bootpay`).
 
 ```bash
-NPM_TOKEN=$(grep NPM_TOKEN ../react-native-webview-bootpay/.env | cut -d= -f2)
+NPM_TOKEN=$(grep -m1 '^NPM_TOKEN' ~/bootpay-commerce/multi-manager/projects/ai-docs/bootpay-mcp/.env | cut -d= -f2)
+npm access list collaborators react-native-bootpay-api --//registry.npmjs.org/:_authToken=$NPM_TOKEN  # 권한 먼저 확인
 npm publish --//registry.npmjs.org/:_authToken=$NPM_TOKEN
 git tag v<version> && git push origin v<version>
 ```
