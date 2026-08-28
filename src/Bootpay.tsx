@@ -19,6 +19,7 @@ import {
 import { debounce } from 'lodash';
 import UserInfo from './UserInfo';
 import { buildEnvironmentScript } from './environment';
+import { buildCloseBridgeScript, parseWebViewMessage } from './closeBridge';
 
 const SDK_VERSION = '13.15.0';
 const DEBUG_MODE = false;
@@ -29,7 +30,6 @@ export class Bootpay extends Component<BootpayTypesProps> {
         ${this.getSDKVersion()}
         ${this.getEnvironmentMode()}
         ${this.getBootpayPlatform()}
-        ${this.close()}
         ${await this.getAnalyticsData()}
         `;
   };
@@ -104,15 +104,13 @@ export class Bootpay extends Component<BootpayTypesProps> {
     return "else if (res.event === 'cancel') { window.BootpayRNWebView.postMessage( JSON.stringify(res) ); }";
   };
 
-  close = () => {
-    return "document.addEventListener('bootpayclose', function (e) {  window.BootpayRNWebView.postMessage('close'); });";
-  };
+  closeBridge = () => buildCloseBridgeScript();
 
   onMessage = async (event: WebViewMessageEvent) => {
     if (!event) return;
 
     try {
-      const res = JSON.parse(event.nativeEvent.data);
+      const res = parseWebViewMessage(event.nativeEvent.data);
 
       if (res === 'close') {
         this.showProgressBar(false);
@@ -120,7 +118,12 @@ export class Bootpay extends Component<BootpayTypesProps> {
         return;
       }
 
-      const data = typeof res === 'string' ? JSON.parse(res) : res;
+      if (typeof res !== 'object' || res === null) {
+        console.warn(`Unknown message payload: ${event.nativeEvent.data}`);
+        return;
+      }
+
+      const data = res as { event?: string } & Record<string, unknown>;
 
       let show_success = false;
       let show_error = false;
@@ -153,7 +156,10 @@ export class Bootpay extends Component<BootpayTypesProps> {
           break;
         case 'confirm':
           this.showProgressBar(true);
-          if (this.props.onConfirm && this.props.onConfirm(data)) {
+          if (
+            this.props.onConfirm &&
+            this.props.onConfirm(data as BootpayEventData)
+          ) {
             this.transactionConfirm();
           }
           break;
@@ -292,8 +298,17 @@ export class Bootpay extends Component<BootpayTypesProps> {
     this.setState({
       visibility: true,
       script: `
-            ${await this.getMountJavascript()} 
-            ${this.generateScript(payload, requestMethod)}
+            ${this.closeBridge()}
+            try {
+              ${await this.getMountJavascript()}
+              ${this.generateScript(payload, requestMethod)}
+            } catch (e) {
+              ${
+                DEBUG_MODE
+                  ? "console.log('[Bootpay] mount script skipped:', e && e.message);"
+                  : ''
+              }
+            }
             `,
       firstLoad: false,
       showCloseButton: extra.show_close_button || false,

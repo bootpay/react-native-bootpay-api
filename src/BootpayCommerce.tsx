@@ -21,6 +21,7 @@ import {
 } from './CommerceTypes';
 import { debounce } from 'lodash';
 import { buildEnvironmentScript } from './environment';
+import { buildCloseBridgeScript, parseWebViewMessage } from './closeBridge';
 
 const COMMERCE_URL = 'https://webview.bootpay.co.kr/commerce/1.0.5/index.html';
 const DEBUG_MODE = false;
@@ -76,13 +77,6 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
       scripts.push('BootpayCommerce.setLogLevel(1);');
     }
 
-    // close 이벤트 리스너
-    scripts.push(
-      "document.addEventListener('bootpayclose', function(e) { " +
-        "window.BootpayRNWebView.postMessage('close'); " +
-        '});'
-    );
-
     // 결제 요청 호출
     scripts.push('BootpayCommerce.requestCheckout(');
     scripts.push(payload.toJSONString());
@@ -100,7 +94,9 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
 
   getMountJavascript = () => {
     // iOS SDK와 동일: Commerce에서는 setDevice 호출하지 않음
+    // close 브릿지는 BootpayCommerce 전역 없이도 동작해야 하므로 가장 먼저 주입한다.
     return `
+      ${buildCloseBridgeScript()}
       ${this.getEnvironmentMode()}
     `;
   };
@@ -320,17 +316,23 @@ export class BootpayCommerce extends Component<BootpayCommerceProps> {
     if (!event) return;
 
     try {
-      const messageData = event.nativeEvent.data;
+      const res = parseWebViewMessage(event.nativeEvent.data);
 
-      // close 이벤트 처리
-      if (messageData === 'close') {
+      // close 이벤트 처리 (구버전 webview 의 raw 'close' 문자열 포함)
+      if (res === 'close') {
         this.showProgressBar(false);
         this.closeDismiss();
         return;
       }
 
-      const data =
-        typeof messageData === 'string' ? JSON.parse(messageData) : messageData;
+      if (typeof res !== 'object' || res === null) {
+        console.warn(
+          `Unknown commerce message payload: ${event.nativeEvent.data}`
+        );
+        return;
+      }
+
+      const data = res as { event?: string } & Record<string, unknown>;
 
       const handleEvent = (
         _eventName: string,
