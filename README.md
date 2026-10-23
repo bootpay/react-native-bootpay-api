@@ -357,11 +357,11 @@ releaseWarmUp();
 
 ## Documentation
 
-[부트페이 개발매뉴얼](https://docs.bootpay.co.kr/?front=react-native&backend=nodejs)을 참조해주세요
+[부트페이 결제 개발문서](https://developers.bootpay.ai)를 참조해주세요
 
 ## 기술문의
 
-[채팅](https://bootpay.channel.io/)으로 문의
+[부트페이 홈페이지](https://www.bootpay.ai)에서 문의해주세요
 
 ## License
 
